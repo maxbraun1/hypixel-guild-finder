@@ -1,0 +1,45 @@
+interface h_guild {
+  _id: string;
+  name: string;
+  description: string;
+  preferredGames: string[];
+  name_lower: string;
+  coins: number;
+  coinsEver: number;
+  created: string;
+  members: {
+    uuid: string;
+    rank: string;
+    joined: string;
+    questParticipation: number;
+    mutedTill: string;
+  }[];
+  tag: string;
+  tagColor: string;
+  publiclyListed: boolean;
+  guildExpByGameType: {
+    [key: string]: number;
+  };
+  ranks: {
+    name: string;
+    default: boolean;
+    tag: string;
+    created: string;
+    priority: number;
+  }[];
+}
+
+interface guild {
+  id: string;
+  created_at: string;
+  owner: string;
+  hypixel_id: string;
+  accepting_members: boolean;
+  name: string;
+  members_count: number;
+  guild_founded_at: string;
+  top_3_games: { [key: string]: number };
+  verified: boolean;
+  last_updated: string;
+  description: string;
+}

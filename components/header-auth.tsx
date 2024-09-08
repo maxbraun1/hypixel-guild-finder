@@ -1,56 +1,25 @@
-import { signOutAction } from "@/app/actions";
-import { hasEnvVars } from "@/utils/supabase/check-env-vars";
 import Link from "next/link";
-import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { createClient } from "@/utils/supabase/server";
+import { BadgeCheck, Check, Plus } from "lucide-react";
+import { signOutAction } from "@/app/actions/auth-actions";
+import { getGuild } from "@/app/actions/account-actions";
 
 export default async function AuthButton() {
+  const client = createClient();
   const {
     data: { user },
-  } = await createClient().auth.getUser();
+  } = await client.auth.getUser();
 
-  if (!hasEnvVars) {
-    return (
-      <>
-        <div className="flex gap-4 items-center">
-          <div>
-            <Badge
-              variant={"default"}
-              className="font-normal pointer-events-none"
-            >
-              Please update .env.local file with anon key and url
-            </Badge>
-          </div>
-          <div className="flex gap-2">
-            <Button
-              asChild
-              size="sm"
-              variant={"outline"}
-              disabled
-              className="opacity-75 cursor-none pointer-events-none"
-            >
-              <Link href="/sign-in">Sign in</Link>
-            </Button>
-            <Button
-              asChild
-              size="sm"
-              variant={"default"}
-              disabled
-              className="opacity-75 cursor-none pointer-events-none"
-            >
-              <Link href="/sign-up">Sign up</Link>
-            </Button>
-          </div>
-        </div>
-      </>
-    );
-  }
   return user ? (
     <div className="flex items-center gap-4">
-      Hey, {user.email}!
+      {PrimaryButton()}
       <form action={signOutAction}>
-        <Button type="submit" variant={"outline"}>
+        <Button
+          className="h-auto py-1.5 px-3"
+          type="submit"
+          variant={"outline"}
+        >
           Sign out
         </Button>
       </form>
@@ -65,4 +34,37 @@ export default async function AuthButton() {
       </Button>
     </div>
   );
+}
+
+async function PrimaryButton() {
+  const guild = await getGuild();
+
+  if (!guild) {
+    // If no guild
+    return (
+      <Link href="/guilds/add">
+        <Button className="h-auto py-1.5 px-3 flex gap-1">
+          <Plus size={15} /> Add Your Guild
+        </Button>
+      </Link>
+    );
+  } else if (!guild.verified) {
+    // if guild isn't verified
+    return (
+      <Link href="/guilds/verify">
+        <Button className="h-auto py-1.5 px-3 flex gap-1">
+          <BadgeCheck size={15} /> Verify Your Guild
+        </Button>
+      </Link>
+    );
+  } else {
+    // if guild is added and verified
+    return (
+      <Link href={`/guilds/${guild.hypixel_id}`}>
+        <Button className="h-auto py-1.5 px-3 flex gap-1">
+          <Check size={15} /> View Your Guild
+        </Button>
+      </Link>
+    );
+  }
 }
