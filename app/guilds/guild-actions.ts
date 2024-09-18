@@ -1,7 +1,7 @@
 "use server";
 
 import { getGuildID, getMCUsername } from "@/app/actions/account-actions";
-import { getGuildInfo } from "@/lib/utils";
+import { UUIDtoUsername, getGuildInfo } from "@/lib/utils";
 import { createClient } from "@/utils/supabase/server";
 import axios from "axios";
 
@@ -47,11 +47,16 @@ export async function addGuild(guild: h_guild) {
   const description = guild.description;
   const member_count = guild.members.length;
   const guild_founded_date = new Date(parseInt(guild.created));
-  const top_3_games = Object.fromEntries(
-    Object.entries(guild.guildExpByGameType)
-      .sort(([, expA], [, expB]) => expB - expA)
-      .slice(0, 3)
-  );
+  const top_3_games = Object.entries(guild.guildExpByGameType)
+    .sort(([, expA], [, expB]) => expB - expA)
+    .slice(0, 3);
+  const owner_uuid = guild.members.find(
+    (member) => member.rank === "Guild Master"
+  )?.uuid;
+
+  if (!owner_uuid) return null;
+
+  const owner_username = await UUIDtoUsername(owner_uuid);
 
   const supabase = createClient();
   const userid = (await supabase.auth.getUser()).data.user?.id;
@@ -63,11 +68,14 @@ export async function addGuild(guild: h_guild) {
     .insert({
       hypixel_id: id,
       owner: userid,
+      owner_username,
       name,
       description,
       members_count: member_count,
       guild_founded_at: guild_founded_date,
-      top_3_games,
+      top_game_1: { name: top_3_games[0][0], exp: top_3_games[0][1] },
+      top_game_2: { name: top_3_games[1][0], exp: top_3_games[1][1] },
+      top_game_3: { name: top_3_games[2][0], exp: top_3_games[2][1] },
     })
     .select("id");
 
@@ -95,7 +103,7 @@ export async function fetchAndUpdateGuild(id: string) {
 
   // Return data and skip updating if guild has been updated within last 24 hours
   const last_updated = new Date(data[0].last_updated).getTime();
-  const one_day_ago = Date.now() - 1000 * 60 * 60 * 24;
+  const one_day_ago = Date.now() - 1000 * 60 * 60 * 0;
   if (last_updated > one_day_ago) {
     // was updated less than 24 hours ago
     console.log("skipped update");
@@ -107,10 +115,19 @@ export async function fetchAndUpdateGuild(id: string) {
     .get(
       `https://api.hypixel.net/guild?key=${process.env.HYPIXEL_KEY}&id=${data[0].hypixel_id}`
     )
-    .then((response) => {
+    .then(async (response) => {
       if (response.data.success) {
+        if (response.data.guild === null) {
+          // Guild has been disbanded
+          console.log("guild has been disbanded. ID: ", id);
+          await supabase.from("guilds").delete().eq("hypixel_id", id);
+          return null;
+        }
         return response.data.guild as h_guild;
-      } else return null;
+      } else {
+        console.log(response);
+        return null;
+      }
     })
     .catch((err) => {
       console.log(err);
@@ -125,11 +142,16 @@ export async function fetchAndUpdateGuild(id: string) {
   const description = guild.description;
   const member_count = guild.members.length;
   const guild_founded_date = new Date(parseInt(guild.created));
-  const top_3_games = Object.fromEntries(
-    Object.entries(guild.guildExpByGameType)
-      .sort(([, expA], [, expB]) => expB - expA)
-      .slice(0, 3)
-  );
+  const top_3_games = Object.entries(guild.guildExpByGameType)
+    .sort(([, expA], [, expB]) => expB - expA)
+    .slice(0, 3);
+  const owner_uuid = guild.members.find(
+    (member) => member.rank === "Guild Master"
+  )?.uuid;
+
+  if (!owner_uuid) return null;
+
+  const owner_username = await UUIDtoUsername(owner_uuid);
 
   const { data: newdata, error: newerror } = await supabase
     .from("guilds")
@@ -137,10 +159,13 @@ export async function fetchAndUpdateGuild(id: string) {
       hypixel_id: guild_id,
       name,
       description,
+      owner_username,
       members_count: member_count,
       guild_founded_at: guild_founded_date,
-      top_3_games,
       last_updated: new Date(),
+      top_game_1: { name: top_3_games[0][0], exp: top_3_games[0][1] },
+      top_game_2: { name: top_3_games[1][0], exp: top_3_games[1][1] },
+      top_game_3: { name: top_3_games[2][0], exp: top_3_games[2][1] },
     })
     .eq("hypixel_id", id)
     .select();
@@ -257,4 +282,90 @@ export async function verifyGuild() {
   }
 
   return false;
+}
+
+export async function getTopGuilds() {
+  const supabase = createClient();
+
+  const { data: guilds, error } = await supabase
+    .from("guilds")
+    .select()
+    .order("members_count", { ascending: false })
+    .eq("verified", true);
+
+  if (error || guilds.length < 1) {
+    error && console.log(error);
+    return null;
+  }
+
+  return guilds as guild[];
+}
+
+export async function guildSearch(
+  term: string | null,
+  topGame: string | null,
+  guildSize: string | null,
+  page: number | null
+) {
+  // Number of results to return per page
+  const resultsPerPage = 12;
+
+  const guildSizeValues = ["small", "medium", "large"];
+  if (
+    guildSize !== "small" &&
+    guildSize !== "medium" &&
+    guildSize !== "large"
+  ) {
+    guildSize = null;
+  }
+  // guild sizes
+  const sizes = {
+    small: [0, 20],
+    medium: [21, 80],
+    large: [80, 1000],
+  };
+  const supabase = createClient();
+
+  let query = supabase
+    .from("guilds")
+    .select("*", { count: "exact" })
+    .order("members_count", { ascending: false })
+    .eq("verified", true);
+
+  if (term) {
+    query = query.textSearch("name", term, {
+      type: "plain",
+      config: "english",
+    });
+  }
+
+  if (guildSize) {
+    query
+      .gte("members_count", sizes[guildSize][0])
+      .lte("members_count", sizes[guildSize][1]);
+  }
+
+  if (topGame) {
+    query.eq("top_game_1->name", JSON.stringify(topGame));
+  }
+
+  if (page) {
+    query.range(resultsPerPage * (page - 1), resultsPerPage * page - 1);
+  } else {
+    query.range(0, resultsPerPage - 1);
+  }
+
+  const { data: guilds, count, error } = await query;
+
+  if (error || guilds.length < 1) {
+    error && console.log(error);
+    return { error, data: null, count: 0, perPage: 0 };
+  }
+
+  return { error: false, data: guilds, count, perPage: resultsPerPage } as {
+    error: boolean;
+    data: guild[];
+    count: number;
+    perPage: number;
+  };
 }

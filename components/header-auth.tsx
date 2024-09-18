@@ -1,28 +1,55 @@
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { createClient } from "@/utils/supabase/server";
-import { BadgeCheck, Check, Plus } from "lucide-react";
+import { BadgeCheck, Eye, Menu, Plus } from "lucide-react";
 import { signOutAction } from "@/app/actions/auth-actions";
 import { getGuild } from "@/app/actions/account-actions";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export default async function AuthButton() {
   const client = createClient();
   const {
     data: { user },
   } = await client.auth.getUser();
+  const guild = await getGuild();
 
   return user ? (
-    <div className="flex items-center gap-4">
+    <div className="flex items-center gap-2">
       {PrimaryButton()}
-      <form action={signOutAction}>
-        <Button
-          className="h-auto py-1.5 px-3"
-          type="submit"
-          variant={"outline"}
-        >
-          Sign out
-        </Button>
-      </form>
+      <DropdownMenu>
+        <DropdownMenuTrigger className="border p-1.5 rounded-lg outline-none">
+          <Menu size={20} />
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuItem asChild className="cursor-pointer">
+            <Link href="/">Home</Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild className="cursor-pointer">
+            <Link href="/account">My Account</Link>
+          </DropdownMenuItem>
+          {guild && (
+            <DropdownMenuItem asChild className="cursor-pointer">
+              <Link href="/requests/incoming">Requests</Link>
+            </DropdownMenuItem>
+          )}
+          <DropdownMenuSeparator />
+          <form action={signOutAction}>
+            <Button
+              className="h-auto py-1.5 px-3 w-full"
+              type="submit"
+              variant={"outline"}
+            >
+              Sign out
+            </Button>
+          </form>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   ) : (
     <div className="flex gap-2">
@@ -61,8 +88,8 @@ async function PrimaryButton() {
     // if guild is added and verified
     return (
       <Link href={`/guilds/${guild.hypixel_id}`}>
-        <Button className="h-auto py-1.5 px-3 flex gap-1">
-          <Check size={15} /> View Your Guild
+        <Button className="h-auto py-1.5 px-3 flex gap-2">
+          <Eye size={18} /> View Your Guild
         </Button>
       </Link>
     );

@@ -20,6 +20,7 @@ const config = {
     extend: {
       fontFamily: {
         roboto: ["Roboto", "sans-serif"],
+        pixel: ["Tiny5", "sans-serif"],
       },
       colors: {
         border: "hsl(var(--border))",

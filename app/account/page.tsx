@@ -15,9 +15,7 @@ export default async function AccountInfo({
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) {
-    return redirect("/sign-in");
-  }
+  if (!user) redirect("/sign-in");
 
   if (searchParams) console.log(searchParams);
 

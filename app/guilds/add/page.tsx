@@ -1,8 +1,18 @@
 import { getMCUsername } from "@/app/actions/account-actions";
 import Link from "next/link";
 import AddGuildButton from "./components/add-guild-button";
+import { redirect } from "next/navigation";
+import { createClient } from "@/utils/supabase/server";
 
 export default async function AddGuild() {
+  const supabase = createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) redirect("/sign-up");
+
   async function checkUsername() {
     const MCUsername = await getMCUsername();
     if (!MCUsername) {
@@ -19,9 +29,9 @@ export default async function AddGuild() {
   }
 
   return (
-    <>
+    <div>
       <h1 className="text-3xl font-bold mb-5">Add Your Guild</h1>
       {checkUsername()}
-    </>
+    </div>
   );
 }

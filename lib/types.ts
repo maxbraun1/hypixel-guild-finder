@@ -38,8 +38,20 @@ interface guild {
   name: string;
   members_count: number;
   guild_founded_at: string;
-  top_3_games: { [key: string]: number };
   verified: boolean;
   last_updated: string;
   description: string;
+  owner_username: string;
+  top_game_1: { name: string; exp: number };
+  top_game_2: { name: string; exp: number };
+  top_game_3: { name: string; exp: number };
+}
+
+interface request {
+  id: number;
+  created_at: Date;
+  guild_id: string;
+  username: string;
+  message?: string;
+  online: boolean;
 }

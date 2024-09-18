@@ -2,6 +2,10 @@ import { getGuildInfo, getGuildMaster } from "@/lib/utils";
 import { fetchAndUpdateGuild } from "../guild-actions";
 import Image from "next/image";
 import TopGame from "./components/top-game";
+import NoResults from "@/components/no-results";
+import { SearchX } from "lucide-react";
+import Link from "next/link";
+import NotFound from "./components/not-found";
 
 export default async function GuildPage({
   params,
@@ -10,15 +14,13 @@ export default async function GuildPage({
 }) {
   const guild = await fetchAndUpdateGuild(params.id);
 
-  if (!guild) return;
+  if (!guild) return <NotFound />;
 
   const h_guild = await getGuildInfo(guild.hypixel_id);
 
   if (!h_guild) return;
 
   const master = await getGuildMaster(h_guild);
-
-  const top_3_games = Object.entries(guild.top_3_games);
 
   const options = {
     year: "numeric",
@@ -35,13 +37,13 @@ export default async function GuildPage({
     <div className="w-full">
       {/* HEADER */}
       <div className="border-b p-5">
-        <h1 className="text-3xl font-bold">{guild.name}</h1>
-        <p className="text-gray-400">
+        <h1 className="text-3xl font-bold mb-1">{guild.name}</h1>
+        <p className="text-gray-400 text-sm">
+          Created <span className="text-purple-500">{founded}</span>
+        </p>
+        <p className="text-gray-400 text-sm">
           <span className="text-purple-500">{guild.members_count}</span>{" "}
           member(s)
-        </p>
-        <p className="text-gray-400">
-          Created <span className="text-purple-500">{founded}</span>
         </p>
       </div>
 
@@ -71,9 +73,9 @@ export default async function GuildPage({
         <div className="w-1/4 p-5">
           <h2 className="text-xl font-bold mb-3">Top 3 Games</h2>
           <div className="flex flex-col gap-4">
-            {top_3_games.map((game, idx) => (
-              <TopGame key={`game-${idx}`} game={game} />
-            ))}
+            <TopGame game={guild.top_game_1} />
+            <TopGame game={guild.top_game_2} />
+            <TopGame game={guild.top_game_3} />
           </div>
         </div>
       </div>

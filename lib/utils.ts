@@ -42,3 +42,15 @@ export async function getGuildMaster(guild: h_guild) {
   if (!owner_uuid) return null;
   return await UUIDtoUsername(owner_uuid);
 }
+
+export function numberWithCommas(x: number) {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+export function formatGameName(gameName: string): string {
+  const words = gameName.toLowerCase().split("_");
+  const formattedWords = words.map(
+    (word) => word.charAt(0).toUpperCase() + word.slice(1)
+  );
+  return formattedWords.join(" ");
+}

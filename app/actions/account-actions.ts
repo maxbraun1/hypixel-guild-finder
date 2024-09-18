@@ -57,7 +57,6 @@ export async function getMCUsername() {
     return null;
   }
 
-  console.log("DATA:", data);
   return data[0].mc_username as string;
 }
 
@@ -91,4 +90,56 @@ export async function getGuild() {
 
   if (error) return null;
   return data[0] as guild;
+}
+
+export async function sendRequest(
+  username: string,
+  message: string,
+  guild_id: string
+) {
+  const supabase = createClient();
+  const user = (await supabase.auth.getUser()).data.user;
+  const sevenDaysAgo = new Date(
+    Date.now() - 7 * 24 * 60 * 60 * 1000
+  ).toISOString();
+
+  const { data: requests, error: requestError } = await supabase
+    .from("requests")
+    .select()
+    .eq("guild_id", guild_id)
+    .eq("username", username)
+    .gte("created_at", sevenDaysAgo);
+
+  if (requests && requests.length > 0) return false;
+
+  const { error } = await supabase
+    .from("requests")
+    .insert({ guild_id, username, message });
+
+  if (error) return false;
+  return true;
+}
+
+export async function getRequests() {
+  const supabase = createClient();
+  const user = (await supabase.auth.getUser()).data.user;
+
+  if (!user) return null;
+
+  const guild = await getGuild();
+
+  if (!guild) return null;
+
+  const { data: requests, error } = await supabase
+    .from("requests")
+    .select()
+    .eq("guild_id", guild.id)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.log(error);
+    return null;
+  }
+
+  return requests as request[];
 }

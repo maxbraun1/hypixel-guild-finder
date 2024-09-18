@@ -122,7 +122,11 @@ export default function VerificationButton() {
             </AlertDialogTitle>
             <AlertDialogDescription className="text-md">
               Your guild has been successfully verified and is now visible to
-              users.
+              users. You can now{" "}
+              <span className="text-purple-500">
+                remove your verification code from your guild description
+              </span>
+              .
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
