@@ -13,7 +13,6 @@ export default function GuildTileFooter({ guild }: { guild: guild }) {
   useEffect(() => {
     const supabase = createClient();
     supabase.auth.getUser().then((user) => {
-      console.log(user.data.user);
       setUser(user.data.user);
     });
   }, []);
@@ -33,29 +32,16 @@ export default function GuildTileFooter({ guild }: { guild: guild }) {
           <p className="text-neutral-400">Owner</p>
         </div>
       </div>
-      {user ? (
-        <Button
-          variant="secondary"
-          className="text-xs p-2 h-auto"
-          onClick={(e) => {
-            e.preventDefault();
-            setQueryParams({ request: guild.id, request_name: guild.name });
-          }}
-        >
-          Request to Join
-        </Button>
-      ) : (
-        <Button
-          variant="secondary"
-          className="text-xs p-2 h-auto"
-          onClick={(e) => {
-            e.preventDefault();
-            window.location.assign("/sign-in");
-          }}
-        >
-          Request to Join
-        </Button>
-      )}
+      <Button
+        variant="secondary"
+        className="text-xs p-2 h-auto"
+        onClick={(e) => {
+          e.preventDefault();
+          setQueryParams({ request: guild.id, request_name: guild.name });
+        }}
+      >
+        Request to Join
+      </Button>
     </div>
   );
 }

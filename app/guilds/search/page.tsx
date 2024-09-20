@@ -34,7 +34,6 @@ export default function Guilds() {
         setPageCount(response.count / response.perPage);
         setGuilds(response.data);
       }
-      console.log(response);
     });
 
     if (queryParams.get("page")) {

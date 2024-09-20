@@ -17,8 +17,6 @@ export default async function AccountInfo({
 
   if (!user) redirect("/sign-in");
 
-  if (searchParams) console.log(searchParams);
-
   return (
     <>
       <h1 className="text-3xl font-bold mb-5">Account Info</h1>

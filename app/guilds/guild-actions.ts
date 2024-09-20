@@ -103,10 +103,9 @@ export async function fetchAndUpdateGuild(id: string) {
 
   // Return data and skip updating if guild has been updated within last 24 hours
   const last_updated = new Date(data[0].last_updated).getTime();
-  const one_day_ago = Date.now() - 1000 * 60 * 60 * 0;
+  const one_day_ago = Date.now() - 1000 * 60 * 60 * 24;
   if (last_updated > one_day_ago) {
     // was updated less than 24 hours ago
-    console.log("skipped update");
     return data[0] as guild;
   }
 
@@ -125,7 +124,6 @@ export async function fetchAndUpdateGuild(id: string) {
         }
         return response.data.guild as h_guild;
       } else {
-        console.log(response);
         return null;
       }
     })
@@ -182,8 +180,6 @@ export async function createGuildVerificationCode() {
   const guild = await getGuildID();
   const supabase = createClient();
   const user = (await supabase.auth.getUser()).data.user;
-
-  console.log("Guild", guild);
 
   if (!user) return null;
 

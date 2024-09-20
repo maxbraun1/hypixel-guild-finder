@@ -98,7 +98,6 @@ export default function AddGuildButton() {
     if (dialogOpen) {
       // get users guild
       findUserGuild().then((response) => {
-        console.log(response);
         if (response) setGuild(response);
         setLoading(false);
       });

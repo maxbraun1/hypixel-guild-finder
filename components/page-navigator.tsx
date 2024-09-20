@@ -39,8 +39,6 @@ export default function PageNavigator({
       start = currentPage - (show - 1 - (pageCount - currentPage));
     }
 
-    console.log(start);
-    console.log(end);
     for (let i = start; i <= end; i++) {
       buttons.push(
         <PageButton key={i} number={i} active={currentPage === i} />

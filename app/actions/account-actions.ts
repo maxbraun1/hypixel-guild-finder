@@ -44,8 +44,6 @@ export async function getMCUsername() {
 
   if (!user) return null;
 
-  console.log("USER ID:", user.id);
-
   const { data, error } = await supabase
     .from("profiles")
     .select("mc_username")

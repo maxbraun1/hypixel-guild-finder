@@ -75,7 +75,6 @@ export default function MCUsernameForm() {
         description: "Your username has been updated.",
       });
     }
-    console.log(values);
   }
 
   form.watch(() => {

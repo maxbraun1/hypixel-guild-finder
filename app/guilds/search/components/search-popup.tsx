@@ -32,7 +32,6 @@ export default function SearchPopup() {
 
   useEffect(() => {
     stageForm();
-    console.log(queryParams);
   }, [queryParams]);
 
   function search() {
