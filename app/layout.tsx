@@ -20,13 +20,35 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="font-roboto" suppressHydrationWarning>
+      <head>
+        {!process.env.DEV && (
+          <script
+            defer
+            src="https://cloud.umami.is/script.js"
+            data-website-id="44cec9ac-c7af-4d27-8c4b-8a315e7c5296"
+          ></script>
+        )}
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link
+          rel="icon"
+          href="/icon?<generated>"
+          type="image/<generated>"
+          sizes="<generated>"
+        />
+        <link
+          rel="apple-touch-icon"
+          href="/apple-icon?<generated>"
+          type="image/<generated>"
+          sizes="<generated>"
+        />
+      </head>
       <body className="bg-background text-foreground">
         <main className="min-h-screen flex flex-col items-center">
           <nav className="w-full flex justify-center border-b h-16 bg-neutral-950">
             <div className="w-full max-w-5xl flex gap-5 justify-between items-center p-3 px-5 text-sm">
               <div className="items-center">
                 <Link
-                  className="font-pixel uppercase text-lg leading-4 lg:text-4xl md:text-2xl"
+                  className="font-pixel uppercase text-2xl leading-4 md:text-4xl"
                   href={"/"}
                 >
                   Hypixel Guild Finder

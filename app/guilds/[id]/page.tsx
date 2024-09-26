@@ -48,9 +48,9 @@ export default async function GuildPage({
       </div>
 
       {/* BODY */}
-      <div className="flex divide-x">
+      <div className="flex flex-col divide-x-0 md:flex-row md:divide-x">
         {/* LEFT PANEL */}
-        <div className="w-3/4 p-5 space-y-10">
+        <div className="w-full md:w-3/4 p-5 space-y-10">
           <div>
             <h2 className="text-xl font-bold text-gray-300">Description</h2>
             <p className="text-sm">{guild.description}</p>
@@ -70,9 +70,9 @@ export default async function GuildPage({
           </div>
         </div>
         {/* RIGHT PANEL */}
-        <div className="w-1/4 p-5">
+        <div className="w-full min-w-fit md:w-1/4 p-5 border-t md:border-t-0">
           <h2 className="text-xl font-bold mb-3">Top 3 Games</h2>
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 justify-center">
             <TopGame game={guild.top_game_1} />
             <TopGame game={guild.top_game_2} />
             <TopGame game={guild.top_game_3} />
