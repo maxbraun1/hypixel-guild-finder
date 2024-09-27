@@ -11,11 +11,6 @@ import NoResults from "@/components/no-results";
 import { LoaderCircle } from "lucide-react";
 import PageNavigator from "@/components/page-navigator";
 
-export const metadata = {
-  title: "Search Guilds | Hypixel Guild Finder",
-  description: "The best way to find a guild on Hypixel!",
-};
-
 export default function Guilds() {
   const [loading, setLoading] = useState(true);
   const [guilds, setGuilds] = useState<guild[] | null>(null);
