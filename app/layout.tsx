@@ -2,6 +2,7 @@ import HeaderAuth from "@/components/header-auth";
 import Link from "next/link";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
+import Script from "next/script";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -22,11 +23,11 @@ export default function RootLayout({
     <html lang="en" className="font-roboto" suppressHydrationWarning>
       <head>
         {!process.env.DEV && (
-          <script
+          <Script
             defer
             src="https://cloud.umami.is/script.js"
             data-website-id="44cec9ac-c7af-4d27-8c4b-8a315e7c5296"
-          ></script>
+          ></Script>
         )}
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link
