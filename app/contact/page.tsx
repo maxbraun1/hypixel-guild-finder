@@ -1,4 +1,7 @@
-import Link from "next/link";
+export const metadata = {
+  title: "Contact | Hypixel Guild Finder",
+  description: "The best way to find a guild on Hypixel!",
+};
 
 export default function Contact() {
   return (

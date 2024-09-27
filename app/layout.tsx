@@ -12,6 +12,18 @@ export const metadata = {
   metadataBase: new URL(defaultUrl),
   title: "Hypixel Guild Finder",
   description: "The best way to find a guild on Hypixel!",
+  openGraph: {
+    title: "Hypixel Guild Finder",
+    description: "The best way to find a guild on Hypixel!",
+    siteName: "Hypixel Guild Finder",
+    images: [
+      {
+        url: "https://f005.backblazeb2.com/file/msb-random-bucket/H+(1)-modified.png",
+        width: 800,
+        height: 800,
+      },
+    ],
+  },
 };
 
 export default function RootLayout({

@@ -4,7 +4,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { forgotPasswordAction } from "@/app/actions/auth-actions";
-import { Separator } from "@/components/ui/separator";
+
+export const metadata = {
+  title: "Forgot Password | Hypixel Guild Finder",
+  description: "The best way to find a guild on Hypixel!",
+};
 
 export default function ForgotPassword({
   searchParams,

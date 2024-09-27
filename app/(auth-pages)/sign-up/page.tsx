@@ -5,6 +5,11 @@ import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { signUpAction } from "@/app/actions/auth-actions";
 
+export const metadata = {
+  title: "Sign Up | Hypixel Guild Finder",
+  description: "The best way to find a guild on Hypixel!",
+};
+
 export default function Signup({ searchParams }: { searchParams: Message }) {
   if ("message" in searchParams) {
     return (
