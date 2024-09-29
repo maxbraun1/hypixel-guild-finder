@@ -69,11 +69,11 @@ async function PrimaryButton() {
   if (!guild) {
     // If no guild
     return (
-      <Link href="/guilds/add">
+      <a href="/guilds/add">
         <Button className="h-auto py-1.5 px-3 flex gap-1">
           <Plus size={15} /> Add Your Guild
         </Button>
-      </Link>
+      </a>
     );
   } else if (!guild.verified) {
     // if guild isn't verified

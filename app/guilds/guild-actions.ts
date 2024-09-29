@@ -84,7 +84,7 @@ export async function addGuild(guild: h_guild) {
     return null;
   }
 
-  return data[0].id;
+  return data[0].id as string;
 }
 
 export async function fetchAndUpdateGuild(id: string) {

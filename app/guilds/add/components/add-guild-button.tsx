@@ -20,10 +20,28 @@ export default function AddGuildButton() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [guild, setGuild] = useState<h_guild | null>(null);
   const [addButtonLoading, setAddButtonLoading] = useState(false);
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    if (dialogOpen) {
+      // get users guild
+      findUserGuild().then((response) => {
+        if (response) setGuild(response);
+        setLoading(false);
+      });
+    }
+  }, [dialogOpen]);
 
   async function addUserGuild(guild: h_guild) {
     setAddButtonLoading(true);
     const response = await addGuild(guild);
+    if (response) {
+      // Successfully added guild
+      window.location.replace("/guilds/verify");
+    } else {
+      // Error while adding guild
+      setError(true);
+    }
     setAddButtonLoading(false);
   }
 
@@ -94,15 +112,6 @@ export default function AddGuildButton() {
     }
   }
 
-  useEffect(() => {
-    if (dialogOpen) {
-      // get users guild
-      findUserGuild().then((response) => {
-        if (response) setGuild(response);
-        setLoading(false);
-      });
-    }
-  }, [dialogOpen]);
   return (
     <>
       <Button
@@ -115,6 +124,17 @@ export default function AddGuildButton() {
         Find My Guild
         <Search size={15} />
       </Button>
+
+      {error && (
+        <p className="text-red-400 text-sm mt-3">
+          An error occured while adding your guild. Please try again later or
+          contact me for support at{" "}
+          <a href="mailto:info@hypixelguildfinder.com" className="underline">
+            info@hypixelguildfinder.com
+          </a>
+          .
+        </p>
+      )}
 
       <AlertDialog open={dialogOpen}>{dialogContents()}</AlertDialog>
     </>
