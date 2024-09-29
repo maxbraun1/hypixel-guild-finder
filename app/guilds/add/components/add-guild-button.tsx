@@ -41,8 +41,8 @@ export default function AddGuildButton() {
     } else {
       // Error while adding guild
       setError(true);
+      setAddButtonLoading(false);
     }
-    setAddButtonLoading(false);
   }
 
   function dialogContents() {

@@ -103,7 +103,7 @@ export async function fetchAndUpdateGuild(id: string) {
 
   // Return data and skip updating if guild has been updated within last 24 hours
   const last_updated = new Date(data[0].last_updated).getTime();
-  const one_day_ago = Date.now() - 1000 * 60 * 60 * 24;
+  const one_day_ago = Date.now() - 1000 * 60 * 60 * 6;
   if (last_updated > one_day_ago) {
     // was updated less than 24 hours ago
     return data[0] as guild;
