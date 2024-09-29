@@ -34,6 +34,19 @@ export default function RootLayout({
   return (
     <html lang="en" className="font-roboto" suppressHydrationWarning>
       <head>
+        <link
+          rel="apple-touch-icon"
+          href="/apple-icon?<generated>"
+          type="image/<generated>"
+          sizes="<generated>"
+        />
+        <link
+          rel="icon"
+          href="/icon?<generated>"
+          type="image/<generated>"
+          sizes="<generated>"
+        />
+        <link rel="icon" href="/icon.ico" sizes="any" />
         {!process.env.DEV && (
           <Script
             defer
@@ -41,19 +54,6 @@ export default function RootLayout({
             data-website-id="44cec9ac-c7af-4d27-8c4b-8a315e7c5296"
           ></Script>
         )}
-        <link
-          rel="apple-touch-icon"
-          href="/apple-icon?<generated>"
-          type="image/<generated>"
-          sizes="<generated>"
-        />
-        <link rel="icon" href="/favicon.ico" sizes="any" />
-        <link
-          rel="icon"
-          href="/icon?<generated>"
-          type="image/<generated>"
-          sizes="<generated>"
-        />
       </head>
       <body className="bg-background text-foreground">
         <main className="min-h-screen flex flex-col items-center">
