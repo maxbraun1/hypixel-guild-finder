@@ -67,7 +67,7 @@ export default function SearchPopup() {
             <AlertDialogTitle className="mb-2">
               Filter & Search
             </AlertDialogTitle>
-            <div className="space-y-5">
+            <div className="space-y-5 text-left">
               <Input
                 className="w-full"
                 value={term}
@@ -81,7 +81,7 @@ export default function SearchPopup() {
                   <SelectTrigger className="w-[220px]">
                     <SelectValue placeholder="Game" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="max-h-48">
                     {gameTypes.map((game, idx) => (
                       <SelectItem
                         className="cursor-pointer"
