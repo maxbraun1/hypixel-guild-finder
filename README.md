@@ -2,7 +2,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/github_username/repo_name">
-    <img src="app/favicon.ico" alt="Logo" width="100" height="100">
+    <img src="app/icon.ico" alt="Logo" width="100" height="100">
   </a>
 
 <h3 align="center">Hypixel Guild Finder</h3>
