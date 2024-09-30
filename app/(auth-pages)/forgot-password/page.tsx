@@ -17,7 +17,7 @@ export default function ForgotPassword({
 }) {
   return (
     <>
-      <form className="flex flex-col w-full gap-2 [&>input]:mb-6 min-w-64 max-w-64">
+      <form className="flex flex-col w-full gap-2 [&>input]:mb-6 min-w-64 max-w-sm border p-5">
         <div>
           <h1 className="text-2xl font-medium">Reset Password</h1>
           <p className="text-sm">
