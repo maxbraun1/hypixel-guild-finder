@@ -40,7 +40,9 @@ interface guild {
   guild_founded_at: string;
   verified: boolean;
   last_updated: string;
-  description: string;
+  description: string | null;
+  h_description: string;
+  discord_link: string | null;
   owner_username: string;
   top_game_1: { name: string; exp: number };
   top_game_2: { name: string; exp: number };
@@ -54,4 +56,9 @@ interface request {
   username: string;
   message?: string;
   online: boolean;
+}
+
+interface guild_settings {
+  discord_link?: string | null;
+  description?: string | null;
 }

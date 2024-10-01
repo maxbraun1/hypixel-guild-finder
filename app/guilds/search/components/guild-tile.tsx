@@ -29,7 +29,7 @@ export default function GuildTile({ guild }: { guild: guild }) {
       </div>
       <div className="p-3 flex-grow">
         <p className="text-xs text-gray-400">Created {founded}</p>
-        <p>{guild.description}</p>
+        <p>{guild.h_description}</p>
       </div>
       <div className="flex flex-col p-3 gap-2">
         <TopGameSmall game={guild.top_game_1} />

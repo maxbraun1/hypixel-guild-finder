@@ -90,6 +90,48 @@ export async function getGuild() {
   return data[0] as guild;
 }
 
+export async function getGuildSettings() {
+  const supabase = createClient();
+  const user = (await supabase.auth.getUser()).data.user;
+
+  if (!user) return null;
+
+  const { data, error } = await supabase
+    .from("guilds")
+    .select("description, discord_link")
+    .eq("owner", user.id)
+    .limit(1);
+
+  if (error) return null;
+  return data[0] as guild_settings;
+}
+
+export async function setGuildSettings(settings: guild_settings) {
+  console.log(settings);
+  const supabase = createClient();
+  const user = (await supabase.auth.getUser()).data.user;
+
+  if (!user) return null;
+
+  const id = await getGuildID();
+
+  const { error } = await supabase
+    .from("guilds")
+    .update({
+      description: settings.description,
+      discord_link: settings.discord_link,
+    })
+    .eq("id", id)
+    .select();
+
+  if (error) {
+    console.log(error);
+    return false;
+  }
+
+  return true;
+}
+
 export async function sendRequest(
   username: string,
   message: string,
