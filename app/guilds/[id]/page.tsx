@@ -7,8 +7,9 @@ import NotFound from "./components/not-found";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import DiscordLogo from "@/public/assets/discord-icon.webp";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, SendHorizonal } from "lucide-react";
 import Link from "next/link";
+import GuildFooter from "./components/guild-footer";
 
 export default async function GuildPage({
   params,
@@ -116,7 +117,7 @@ export default async function GuildPage({
             <div>
               <h2 className="text-xl font-bold mb-3">Guild Links</h2>
               <a href={guild.discord_link} target="_blank">
-                <Button className="flex gap-2">
+                <Button variant="secondary" className="flex gap-2">
                   <Image
                     width={25}
                     height={25}
@@ -129,6 +130,9 @@ export default async function GuildPage({
             </div>
           )}
         </div>
+      </div>
+      <div className="w-full p-3 flex justify-end">
+        <GuildFooter guild_id={guild.id} guild_name={guild.name} />
       </div>
     </div>
   );

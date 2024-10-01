@@ -2,13 +2,14 @@
 
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/utils/supabase/client";
-import useQueryParams from "@/utils/useQueryParams";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { useRequestStore } from "../request-store";
 
 export default function GuildTileFooter({ guild }: { guild: guild }) {
   const [user, setUser] = useState<any>(null);
-  const { queryParams, setQueryParams } = useQueryParams();
+  const { guild_id, guild_name, setGuildId, setGuildName, clear } =
+    useRequestStore();
 
   useEffect(() => {
     const supabase = createClient();
@@ -37,7 +38,8 @@ export default function GuildTileFooter({ guild }: { guild: guild }) {
         className="text-xs p-2 h-auto"
         onClick={(e) => {
           e.preventDefault();
-          setQueryParams({ request: guild.id, request_name: guild.name });
+          setGuildId(guild.id);
+          setGuildName(guild.name);
         }}
       >
         Request to Join

@@ -1,5 +1,4 @@
 "use client";
-import useQueryParams from "@/utils/useQueryParams";
 import { useEffect, useState } from "react";
 import {
   AlertDialog,
@@ -26,6 +25,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { LoaderCircle, SendHorizonal } from "lucide-react";
 import { sendRequest } from "@/app/actions/account-actions";
 import { toast } from "@/hooks/use-toast";
+import { useRequestStore } from "../request-store";
 
 const formSchema = z.object({
   username: z
@@ -43,20 +43,16 @@ const formSchema = z.object({
 
 export default function RequestPopup() {
   const [open, setOpen] = useState(false);
-  const [requestGuildID, setRequestGuildId] = useState<null | string>(null);
-  const [requestGuildName, setRequestGuildName] = useState<null | string>(null);
-  const { queryParams, setQueryParams } = useQueryParams();
   const [sendButtonLoading, setSendButtonLoading] = useState(false);
+  const { guild_id, guild_name, clear } = useRequestStore();
 
   useEffect(() => {
-    if (queryParams.get("request") && queryParams.get("request_name")) {
-      setRequestGuildId(queryParams.get("request"));
-      setRequestGuildName(queryParams.get("request_name"));
+    if (guild_id && guild_name) {
       setOpen(true);
     } else {
       setOpen(false);
     }
-  }, [queryParams]);
+  }, [guild_id, guild_name]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -68,17 +64,14 @@ export default function RequestPopup() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setSendButtonLoading(true);
-    if (requestGuildID) {
-      sendRequest(values.username, values.message, requestGuildID).then(
+    if (guild_id) {
+      sendRequest(values.username, values.message, guild_id).then(
         (response) => {
           setSendButtonLoading(false);
           if (response) {
             // success
             form.reset();
-            setQueryParams({
-              request: undefined,
-              request_name: undefined,
-            });
+            clear();
             toast({
               description: "Your request has been sent!",
             });
@@ -107,7 +100,8 @@ export default function RequestPopup() {
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle className="mb-2">
-            Send Request to {requestGuildName}
+            Send Request to{" "}
+            <span className="text-purple-400">{guild_name}</span>
           </AlertDialogTitle>
           <Form {...form}>
             <form className="space-y-3" onSubmit={form.handleSubmit(onSubmit)}>
@@ -115,14 +109,14 @@ export default function RequestPopup() {
                 control={form.control}
                 name="username"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="text-left">
                     <FormLabel className="text-sm text-white">
                       Minecraft Username
                     </FormLabel>
                     <FormControl>
                       <Input
                         className="text-white !mt-1"
-                        placeholder="Minecraft123"
+                        placeholder="username"
                         {...field}
                       />
                     </FormControl>
@@ -134,7 +128,7 @@ export default function RequestPopup() {
                 control={form.control}
                 name="message"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="text-left">
                     <FormLabel className="text-sm text-white">
                       Message
                     </FormLabel>
@@ -153,10 +147,7 @@ export default function RequestPopup() {
                 <AlertDialogCancel
                   onClick={() => {
                     form.reset();
-                    setQueryParams({
-                      request: undefined,
-                      request_name: undefined,
-                    });
+                    clear();
                   }}
                 >
                   Cancel
