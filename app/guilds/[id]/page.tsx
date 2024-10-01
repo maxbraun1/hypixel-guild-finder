@@ -2,10 +2,9 @@ import { getGuildInfo, getGuildMaster } from "@/lib/utils";
 import { fetchAndUpdateGuild } from "../guild-actions";
 import Image from "next/image";
 import TopGame from "./components/top-game";
-import NoResults from "@/components/no-results";
-import { SearchX } from "lucide-react";
-import Link from "next/link";
+import "./description-styles.css";
 import NotFound from "./components/not-found";
+import { Separator } from "@/components/ui/separator";
 
 export default async function GuildPage({
   params,
@@ -52,9 +51,31 @@ export default async function GuildPage({
         {/* LEFT PANEL */}
         <div className="w-full md:w-3/4 p-5 space-y-10">
           <div>
-            <h2 className="text-xl font-bold text-gray-300">Description</h2>
-            <p className="text-sm">{guild.h_description}</p>
+            {guild.description && (
+              <>
+                <h2 className="text-xl font-bold text-purple-400">
+                  Description
+                </h2>
+                <div
+                  id="description"
+                  className="py-5"
+                  dangerouslySetInnerHTML={{
+                    __html: guild.description || "No description set...",
+                  }}
+                />
+                <Separator />
+              </>
+            )}
+            <div className="py-5">
+              <h2 className="text-xl font-bold text-purple-400">
+                Hypixel Guild Description
+              </h2>
+              <p className="text-sm">
+                {guild.h_description || "No description added..."}
+              </p>
+            </div>
           </div>
+          <Separator />
           <div>
             <h3 className="text-lg font-bold mb-2">Owner</h3>
             <div className="flex items-center gap-4">
