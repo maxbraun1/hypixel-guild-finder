@@ -5,6 +5,8 @@ import TopGame from "./components/top-game";
 import "./description-styles.css";
 import NotFound from "./components/not-found";
 import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
+import DiscordLogo from "@/public/assets/discord-icon.webp";
 
 export default async function GuildPage({
   params,
@@ -91,13 +93,32 @@ export default async function GuildPage({
           </div>
         </div>
         {/* RIGHT PANEL */}
-        <div className="w-full min-w-fit md:w-1/4 p-5 border-t md:border-t-0">
-          <h2 className="text-xl font-bold mb-3">Top 3 Games</h2>
-          <div className="flex flex-col gap-4 justify-center">
-            <TopGame game={guild.top_game_1} />
-            <TopGame game={guild.top_game_2} />
-            <TopGame game={guild.top_game_3} />
+        <div className="w-full min-w-fit md:w-1/4 p-5 border-t md:border-t-0 space-y-5">
+          <div>
+            <h2 className="text-xl font-bold mb-3">Top 3 Games</h2>
+            <div className="flex flex-col gap-4 justify-center">
+              <TopGame game={guild.top_game_1} />
+              <TopGame game={guild.top_game_2} />
+              <TopGame game={guild.top_game_3} />
+            </div>
           </div>
+
+          {guild.discord_link && (
+            <div>
+              <h2 className="text-xl font-bold mb-3">Guild Links</h2>
+              <a href={guild.discord_link}>
+                <Button className="flex gap-2">
+                  <Image
+                    width={25}
+                    height={25}
+                    src={DiscordLogo}
+                    alt="Discord logo"
+                  />
+                  Discord Server
+                </Button>
+              </a>
+            </div>
+          )}
         </div>
       </div>
     </div>
