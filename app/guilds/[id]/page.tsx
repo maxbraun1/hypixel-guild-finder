@@ -7,6 +7,8 @@ import NotFound from "./components/not-found";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import DiscordLogo from "@/public/assets/discord-icon.webp";
+import { ArrowLeft } from "lucide-react";
+import Link from "next/link";
 
 export default async function GuildPage({
   params,
@@ -36,6 +38,13 @@ export default async function GuildPage({
 
   return (
     <div className="w-full">
+      <Link
+        href="/guilds/search"
+        className="flex gap-2 rounded hover:bg-neutral-900 w-fit px-3 py-1.5 items-center"
+      >
+        <ArrowLeft size={15} />
+        <p>Search Guilds</p>
+      </Link>
       {/* HEADER */}
       <div className="border-b p-5">
         <h1 className="text-3xl font-bold mb-1">{guild.name}</h1>
@@ -51,7 +60,7 @@ export default async function GuildPage({
       {/* BODY */}
       <div className="flex flex-col divide-x-0 md:flex-row md:divide-x">
         {/* LEFT PANEL */}
-        <div className="w-full md:w-3/4 p-5 space-y-10">
+        <div className="w-full md:w-3/4 p-5 space-y-5">
           <div>
             {guild.description && (
               <>
@@ -72,7 +81,7 @@ export default async function GuildPage({
               <h2 className="text-xl font-bold text-purple-400">
                 Hypixel Guild Description
               </h2>
-              <p className="text-sm">
+              <p className="text-sm mt-2">
                 {guild.h_description || "No description added..."}
               </p>
             </div>
@@ -106,7 +115,7 @@ export default async function GuildPage({
           {guild.discord_link && (
             <div>
               <h2 className="text-xl font-bold mb-3">Guild Links</h2>
-              <a href={guild.discord_link}>
+              <a href={guild.discord_link} target="_blank">
                 <Button className="flex gap-2">
                   <Image
                     width={25}
