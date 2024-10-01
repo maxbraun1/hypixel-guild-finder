@@ -93,7 +93,10 @@ export default function GuildSettingsForm({
                 dreams, etc.
               </FormDescription>
               <FormControl>
-                <TextEditor set={field.onChange} />
+                <TextEditor
+                  set={field.onChange}
+                  defaultValue={current_values?.description || undefined}
+                />
               </FormControl>
               <FormMessage className="text-red-400 mt-2" />
             </FormItem>
