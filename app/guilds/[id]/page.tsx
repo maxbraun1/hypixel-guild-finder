@@ -53,7 +53,7 @@ export default async function GuildPage({
         <div className="w-full md:w-3/4 p-5 space-y-10">
           <div>
             <h2 className="text-xl font-bold text-gray-300">Description</h2>
-            <p className="text-sm">{guild.description}</p>
+            <p className="text-sm">{guild.h_description}</p>
           </div>
           <div>
             <h3 className="text-lg font-bold mb-2">Owner</h3>

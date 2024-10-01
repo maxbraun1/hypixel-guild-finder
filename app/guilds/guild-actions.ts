@@ -70,7 +70,7 @@ export async function addGuild(guild: h_guild) {
       owner: userid,
       owner_username,
       name,
-      description,
+      h_description: description,
       members_count: member_count,
       guild_founded_at: guild_founded_date,
       top_game_1: { name: top_3_games[0][0], exp: top_3_games[0][1] },
@@ -156,7 +156,7 @@ export async function fetchAndUpdateGuild(id: string) {
     .update({
       hypixel_id: guild_id,
       name,
-      description,
+      h_description: description,
       owner_username,
       members_count: member_count,
       guild_founded_at: guild_founded_date,

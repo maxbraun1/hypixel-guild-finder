@@ -34,9 +34,14 @@ export default async function AuthButton() {
             <Link href="/account">My Account</Link>
           </DropdownMenuItem>
           {guild && (
-            <DropdownMenuItem asChild className="cursor-pointer">
-              <Link href="/requests/incoming">Requests</Link>
-            </DropdownMenuItem>
+            <>
+              <DropdownMenuItem asChild className="cursor-pointer">
+                <Link href="/requests/incoming">Requests</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild className="cursor-pointer">
+                <Link href="/account/guild-settings">Guild Settings</Link>
+              </DropdownMenuItem>
+            </>
           )}
           <DropdownMenuSeparator />
           <form action={signOutAction}>
