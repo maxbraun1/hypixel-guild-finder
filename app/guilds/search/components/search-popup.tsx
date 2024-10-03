@@ -79,7 +79,7 @@ export default function SearchPopup() {
                 <Label>Top Played Game</Label>
                 <Select value={topGame || undefined} onValueChange={setTopGame}>
                   <SelectTrigger className="w-[220px]">
-                    <SelectValue placeholder="Game" />
+                    <SelectValue placeholder="Top Game" />
                   </SelectTrigger>
                   <SelectContent className="max-h-48">
                     {gameTypes.map((game, idx) => (
