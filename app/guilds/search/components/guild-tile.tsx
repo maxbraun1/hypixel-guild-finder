@@ -33,7 +33,7 @@ export default function GuildTile({ guild }: { guild: guild }) {
       </div>
       <div className="p-3 flex-grow">
         {guild.h_description ? (
-          <p>{guild.h_description}</p>
+          <p className="line-clamp-2">{guild.h_description}</p>
         ) : (
           <p className="text-neutral-400">No description...</p>
         )}
