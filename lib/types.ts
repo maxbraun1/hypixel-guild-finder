@@ -56,6 +56,7 @@ interface request {
   username: string;
   message?: string;
   online: boolean;
+  viewed: boolean;
 }
 
 interface guild_settings {

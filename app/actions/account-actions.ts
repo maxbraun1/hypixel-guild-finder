@@ -90,6 +90,25 @@ export async function getGuild() {
   return data[0] as guild;
 }
 
+export async function getRequestCount(guild_id: string) {
+  if (!guild_id) return 0;
+
+  const supabase = createClient();
+  const user = (await supabase.auth.getUser()).data.user;
+
+  if (!user) return 0;
+
+  const { error, count } = await supabase
+    .from("requests")
+    .select("*", { count: "exact" })
+    .eq("guild_id", guild_id)
+    .eq("viewed", false);
+
+  if (error) return 0;
+  console.log(count);
+  return count;
+}
+
 export async function getGuildSettings() {
   const supabase = createClient();
   const user = (await supabase.auth.getUser()).data.user;
@@ -176,10 +195,20 @@ export async function getRequests() {
     .eq("guild_id", guild.id)
     .order("created_at", { ascending: false });
 
+  // Update all requests to viewed
+  const { error: update_error } = await supabase
+    .from("requests")
+    .update({ viewed: true })
+    .eq("guild_id", guild.id);
+
+  if (update_error) console.log(update_error);
+
   if (error) {
     console.log(error);
     return null;
   }
+
+  console.log(requests);
 
   return requests as request[];
 }

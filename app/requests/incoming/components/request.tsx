@@ -1,6 +1,8 @@
 "use client";
+import { useRequestStore } from "@/app/guilds/search/request-store";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
 import { ClipboardCopy } from "lucide-react";
 
 export default function IncomingRequest({ request }: { request: request }) {
@@ -24,7 +26,12 @@ export default function IncomingRequest({ request }: { request: request }) {
   }
 
   return (
-    <div className="border rounded py-2 px-4 flex gap-5">
+    <div
+      className={cn(
+        "border rounded py-2 px-4 flex gap-5",
+        request.viewed === false && "bg-neutral-900"
+      )}
+    >
       <div className="flex-grow">
         <h2 className="font-bold text-lg">{request.username}</h2>
         <p className="text-xs text-neutral-400">{date}</p>

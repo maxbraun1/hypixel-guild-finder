@@ -1,6 +1,7 @@
 import { getGuild, getRequests } from "@/app/actions/account-actions";
 import { redirect } from "next/navigation";
 import IncomingRequest from "./components/request";
+import UpdateRequestCount from "../update-request-count";
 
 export default async function IncomingRequests() {
   const guild = await getGuild();
@@ -13,6 +14,7 @@ export default async function IncomingRequests() {
 
   return (
     <>
+      <UpdateRequestCount />
       <h1 className="text-3xl font-bold">Requests</h1>
       <p className="text-sm text-neutral-400 mb-5">
         These are requests from players that want to join your guild!

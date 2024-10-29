@@ -1,16 +1,9 @@
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { createClient } from "@/utils/supabase/server";
-import { BadgeCheck, Eye, Menu, Plus } from "lucide-react";
-import { signOutAction } from "@/app/actions/auth-actions";
-import { getGuild } from "@/app/actions/account-actions";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { BadgeCheck, Eye, Plus } from "lucide-react";
+import { getGuild, getRequestCount } from "@/app/actions/account-actions";
+import HeaderMenu from "./header-menu";
 
 export default async function AuthButton() {
   const client = createClient();
@@ -18,43 +11,12 @@ export default async function AuthButton() {
     data: { user },
   } = await client.auth.getUser();
   const guild = await getGuild();
+  const request_count = guild ? (await getRequestCount(guild.id)) || 0 : 0;
 
   return user ? (
     <div className="flex items-center gap-2">
       {PrimaryButton()}
-      <DropdownMenu>
-        <DropdownMenuTrigger className="border p-1.5 rounded-lg outline-none">
-          <Menu size={20} />
-        </DropdownMenuTrigger>
-        <DropdownMenuContent>
-          <DropdownMenuItem asChild className="cursor-pointer">
-            <Link href="/">Home</Link>
-          </DropdownMenuItem>
-          <DropdownMenuItem asChild className="cursor-pointer">
-            <Link href="/account">My Account</Link>
-          </DropdownMenuItem>
-          {guild && (
-            <>
-              <DropdownMenuItem asChild className="cursor-pointer">
-                <Link href="/requests/incoming">Requests</Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild className="cursor-pointer">
-                <Link href="/account/guild-settings">Guild Settings</Link>
-              </DropdownMenuItem>
-            </>
-          )}
-          <DropdownMenuSeparator />
-          <form action={signOutAction}>
-            <Button
-              className="h-auto py-1.5 px-3 w-full"
-              type="submit"
-              variant={"outline"}
-            >
-              Sign out
-            </Button>
-          </form>
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <HeaderMenu initial_request_count={request_count} guild={!!guild} />
     </div>
   ) : (
     <div className="flex gap-2">
