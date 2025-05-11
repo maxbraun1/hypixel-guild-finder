@@ -13,7 +13,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { useEffect, useState } from "react";
-import findUserGuild, { addGuild } from "../../guild-actions";
+import findUserGuild, { addGuild } from "../../../actions/guild-actions";
 
 export default function AddGuildButton() {
   const [loading, setLoading] = useState(true);

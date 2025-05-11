@@ -10,11 +10,13 @@ export const metadata = {
   description: "The best way to find a guild on Hypixel!",
 };
 
-export default function ForgotPassword({
+export default async function ForgotPassword({
   searchParams,
 }: {
-  searchParams: Message;
+  searchParams: Promise<Message>;
 }) {
+  const message = await searchParams;
+
   return (
     <>
       <form className="flex flex-col w-full gap-2 [&>input]:mb-6 min-w-64 max-w-sm border p-5">
@@ -33,7 +35,7 @@ export default function ForgotPassword({
           <SubmitButton formAction={forgotPasswordAction}>
             Reset Password
           </SubmitButton>
-          <FormMessage message={searchParams} />
+          <FormMessage message={message} />
         </div>
       </form>
     </>

@@ -9,7 +9,7 @@ export default async function AccountInfo({
   params: { slug: string };
   searchParams?: { [key: string]: string | string[] | undefined };
 }) {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const {
     data: { user },

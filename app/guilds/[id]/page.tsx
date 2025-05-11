@@ -1,5 +1,5 @@
 import { getGuildInfo, getGuildMaster } from "@/lib/utils";
-import { fetchAndUpdateGuild } from "../guild-actions";
+import { fetchAndUpdateGuild } from "../../actions/guild-actions";
 import Image from "next/image";
 import TopGame from "./components/top-game";
 import "./description-styles.css";
@@ -7,7 +7,7 @@ import NotFound from "./components/not-found";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import DiscordLogo from "@/public/assets/discord-icon.webp";
-import { ArrowLeft, SendHorizonal } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import GuildFooter from "./components/guild-footer";
 
@@ -53,8 +53,8 @@ export default async function GuildPage({
           Created <span className="text-purple-500">{founded}</span>
         </p>
         <p className="text-gray-400 text-sm">
-          <span className="text-purple-500">{guild.members_count}</span>{" "}
-          member(s)
+          <span className="text-purple-500">{guild.members_count}</span> member
+          {guild.members_count !== 1 && "s"}
         </p>
       </div>
 

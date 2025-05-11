@@ -57,7 +57,6 @@ export default function GuildSettingsForm({
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setLoading(true);
-    console.log(values);
     const result = await setGuildSettings(values);
     setLoading(false);
     if (result) {

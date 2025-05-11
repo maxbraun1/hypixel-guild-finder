@@ -6,7 +6,7 @@ import { getGuild, getRequestCount } from "@/app/actions/account-actions";
 import HeaderMenu from "./header-menu";
 
 export default async function AuthButton() {
-  const client = createClient();
+  const client = await createClient();
   const {
     data: { user },
   } = await client.auth.getUser();

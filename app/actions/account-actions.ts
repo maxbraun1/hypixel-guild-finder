@@ -3,7 +3,7 @@
 import { createClient } from "@/utils/supabase/server";
 
 export async function updateMCUsername(username: string) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const user = (await supabase.auth.getUser()).data.user;
 
   if (!user) return { error: "Invalid session" };
@@ -39,7 +39,7 @@ export async function updateMCUsername(username: string) {
 }
 
 export async function getMCUsername() {
-  const supabase = createClient();
+  const supabase = await createClient();
   const user = (await supabase.auth.getUser()).data.user;
 
   if (!user) return null;
@@ -59,7 +59,7 @@ export async function getMCUsername() {
 }
 
 export async function getGuildID() {
-  const supabase = createClient();
+  const supabase = await createClient();
   const user = (await supabase.auth.getUser()).data.user;
 
   if (!user) return null;
@@ -75,7 +75,7 @@ export async function getGuildID() {
 }
 
 export async function getGuild() {
-  const supabase = createClient();
+  const supabase = await createClient();
   const user = (await supabase.auth.getUser()).data.user;
 
   if (!user) return null;
@@ -93,7 +93,7 @@ export async function getGuild() {
 export async function getRequestCount(guild_id: string) {
   if (!guild_id) return 0;
 
-  const supabase = createClient();
+  const supabase = await createClient();
   const user = (await supabase.auth.getUser()).data.user;
 
   if (!user) return 0;
@@ -105,12 +105,11 @@ export async function getRequestCount(guild_id: string) {
     .eq("viewed", false);
 
   if (error) return 0;
-  console.log(count);
   return count;
 }
 
 export async function getGuildSettings() {
-  const supabase = createClient();
+  const supabase = await createClient();
   const user = (await supabase.auth.getUser()).data.user;
 
   if (!user) return null;
@@ -127,7 +126,7 @@ export async function getGuildSettings() {
 
 export async function setGuildSettings(settings: guild_settings) {
   console.log(settings);
-  const supabase = createClient();
+  const supabase = await createClient();
   const user = (await supabase.auth.getUser()).data.user;
 
   if (!user) return null;
@@ -156,7 +155,7 @@ export async function sendRequest(
   message: string,
   guild_id: string
 ) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const user = (await supabase.auth.getUser()).data.user;
   const sevenDaysAgo = new Date(
     Date.now() - 7 * 24 * 60 * 60 * 1000
@@ -180,7 +179,7 @@ export async function sendRequest(
 }
 
 export async function getRequests() {
-  const supabase = createClient();
+  const supabase = await createClient();
   const user = (await supabase.auth.getUser()).data.user;
 
   if (!user) return null;

@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import GuildSettingsForm from "./components/guild-settings-form";
 
 export default async function GuildSettings() {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const {
     data: { user },

@@ -6,7 +6,7 @@ import GuildGrid from "./components/guild-grid";
 import SearchPopup from "./components/search-popup";
 import { useEffect, useState } from "react";
 import useQueryParams from "@/utils/useQueryParams";
-import { guildSearch } from "../guild-actions";
+import { guildSearch } from "../../actions/guild-actions";
 import NoResults from "@/components/no-results";
 import { LoaderCircle } from "lucide-react";
 import PageNavigator from "@/components/page-navigator";

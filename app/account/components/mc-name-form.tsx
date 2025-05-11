@@ -135,14 +135,14 @@ export default function MCUsernameForm() {
               <>
                 <FormItem className="flex border w-fit h-12 rounded overflow-hidden gap-1">
                   <FormControl>
-                    <>
+                    <div>
                       <Input
                         placeholder="HypixelPlayer123"
                         className="w-full max-w-xs h-12 !m-0 border-0 rounded-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
                         {...field}
                       />
                       {submitButton()}
-                    </>
+                    </div>
                   </FormControl>
                 </FormItem>
                 <FormMessage className="text-white mt-2" />

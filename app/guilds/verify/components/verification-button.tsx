@@ -14,7 +14,10 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { useState } from "react";
-import { createGuildVerificationCode, verifyGuild } from "../../guild-actions";
+import {
+  createGuildVerificationCode,
+  verifyGuild,
+} from "../../../actions/guild-actions";
 
 export default function VerificationButton() {
   const [loading, setLoading] = useState(true);
