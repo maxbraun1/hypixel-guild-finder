@@ -413,9 +413,7 @@ export async function sendRequestReminderEmails() {
     : "https://www.hypixelguildfinder.com";
 
   for (let guildWithProfile of guildsWithProfiles) {
-    // Testing
-    if (guildWithProfile.profiles.email === "maxbraun175@gmail.com") {
-      console.log("sending");
+    if (guildWithProfile.profiles.email) {
       try {
         await mg.messages.create("hypixelguildfinder.com", {
           from: "Hypixel Guild Finder <info@hypixelguildfinder.com>",
@@ -433,6 +431,5 @@ export async function sendRequestReminderEmails() {
       }
     }
   }
-
   return guildsWithProfiles.length;
 }
