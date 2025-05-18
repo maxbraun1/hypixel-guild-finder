@@ -14,9 +14,10 @@ import GuildFooter from "./components/guild-footer";
 export default async function GuildPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const guild = await fetchAndUpdateGuild(params.id);
+  let { id } = await params;
+  const guild = await fetchAndUpdateGuild(id);
 
   if (!guild) return <NotFound />;
 

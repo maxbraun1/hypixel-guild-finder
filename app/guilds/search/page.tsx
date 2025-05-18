@@ -5,16 +5,16 @@ import RequestPopup from "./components/request-popup";
 import GuildGrid from "./components/guild-grid";
 import SearchPopup from "./components/search-popup";
 import { useEffect, useState } from "react";
-import useQueryParams from "@/utils/useQueryParams";
 import { guildSearch } from "../../actions/guild-actions";
 import NoResults from "@/components/no-results";
 import { LoaderCircle } from "lucide-react";
 import PageNavigator from "@/components/page-navigator";
+import { useSearchParams } from "next/navigation";
 
 export default function Guilds() {
   const [loading, setLoading] = useState(true);
   const [guilds, setGuilds] = useState<guild[] | null>(null);
-  const { queryParams, setQueryParams } = useQueryParams();
+  const queryParams = useSearchParams();
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState(1);
 

@@ -2,13 +2,7 @@ import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import MCUsernameForm from "./components/mc-name-form";
 
-export default async function AccountInfo({
-  params,
-  searchParams,
-}: {
-  params: { slug: string };
-  searchParams?: { [key: string]: string | string[] | undefined };
-}) {
+export default async function AccountInfo() {
   const supabase = await createClient();
 
   const {

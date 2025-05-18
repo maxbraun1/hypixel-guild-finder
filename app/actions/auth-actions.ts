@@ -4,15 +4,31 @@ import { encodedRedirect } from "@/utils/utils";
 import { createClient } from "@/utils/supabase/server";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import prisma from "@/lib/prisma";
 
-export const signUpAction = async (formData: FormData) => {
+export const signUpAction = async (formData: FormData): Promise<void> => {
   const email = formData.get("email")?.toString();
   const password = formData.get("password")?.toString();
   const supabase = await createClient();
   const origin = (await headers()).get("origin");
 
   if (!email || !password) {
-    return { error: "Email and password are required" };
+    encodedRedirect("error", "/sign-in", "Email and password are required");
+    return;
+  }
+
+  const duplicate = await prisma.profiles.findFirst({
+    where: {
+      email: email,
+    },
+  });
+
+  if (duplicate) {
+    encodedRedirect(
+      "error",
+      "/sign-up",
+      "There is already an account associated with this email address"
+    );
   }
 
   const { error } = await supabase.auth.signUp({
@@ -25,14 +41,15 @@ export const signUpAction = async (formData: FormData) => {
 
   if (error) {
     console.error(error.code + " " + error.message);
-    return encodedRedirect("error", "/sign-up", error.message);
+    encodedRedirect("error", "/sign-up", error.message);
   } else {
-    return encodedRedirect(
+    encodedRedirect(
       "success",
       "/sign-up",
       "Thanks for signing up! Please check your email for a verification link. (Email may be in your spam folder)"
     );
   }
+  return;
 };
 
 export const signInAction = async (formData: FormData) => {

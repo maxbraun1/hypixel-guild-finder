@@ -20,9 +20,10 @@ type SP = {
 export default async function Login({
   searchParams,
 }: {
-  searchParams: Promise<SP>;
+  searchParams?: Promise<{ error?: string; redirectUrl?: string }>;
 }) {
-  const { message, redirectURL } = await searchParams;
+  const error = (await searchParams)?.error;
+  const redirectURL = (await searchParams)?.redirectUrl;
 
   const supabase = await createClient();
 
@@ -74,7 +75,7 @@ export default async function Login({
         <SubmitButton pendingText="Signing In..." formAction={signInAction}>
           Sign in
         </SubmitButton>
-        {message && <FormMessage message={message} />}
+        {error && <FormMessage message={{ error }} />}
       </div>
     </form>
   );
