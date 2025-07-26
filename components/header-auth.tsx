@@ -2,7 +2,10 @@ import Link from "next/link";
 import { Button } from "./ui/button";
 import { createClient } from "@/utils/supabase/server";
 import { BadgeCheck, Eye, Plus } from "lucide-react";
-import { getGuild, getRequestCount } from "@/app/actions/account-actions";
+import {
+  getGuild,
+  getRequestCount,
+} from "@/app/(app-wrapper)/actions/account-actions";
 import HeaderMenu from "./header-menu";
 
 export default async function AuthButton() {
