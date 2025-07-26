@@ -9,9 +9,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Menu } from "lucide-react";
 import Link from "next/link";
-import { signOutAction } from "@/app/actions/auth-actions";
+import { signOutAction } from "@/app/(app-wrapper)/actions/auth-actions";
 import { Button } from "./ui/button";
-import { useRequestStore } from "@/app/guilds/search/request-store";
+import { useRequestStore } from "@/app/(app-wrapper)/guilds/search/request-store";
 import { useEffect } from "react";
 
 export default function HeaderMenu({

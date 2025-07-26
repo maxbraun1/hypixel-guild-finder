@@ -48,7 +48,7 @@ export default function RootLayout({
           sizes="<generated>"
         />
         <link rel="icon" href="/icon.ico" sizes="any" />
-        {!process.env.DEV && (
+        {!process.env.NEXT_PUBLIC_DEV && (
           <Script
             defer
             src="https://cloud.umami.is/script.js"
@@ -71,9 +71,7 @@ export default function RootLayout({
               <HeaderAuth />
             </div>
           </nav>
-          <div className="w-full max-w-5xl p-5 flex-grow flex flex-col">
-            {children}
-          </div>
+          {children}
 
           <footer className="w-full flex items-center justify-center border-t mx-auto text-center text-xs gap-4 py-5 bg-neutral-950">
             <p>
