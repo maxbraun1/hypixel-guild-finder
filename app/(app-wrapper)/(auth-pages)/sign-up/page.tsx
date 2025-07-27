@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { signUpAction } from "@/app/(app-wrapper)/actions/auth-actions";
+import { GoogleSigninButton } from "../_components/google-signin-btn";
 
 export const metadata = {
   title: "Sign Up | Hypixel Guild Finder",
@@ -27,7 +28,12 @@ export default async function Signup({
             Sign in
           </Link>
         </p>
-        <div className="flex flex-col gap-2 [&>input]:mb-3 mt-8">
+
+        <div className="mt-4">
+          <GoogleSigninButton signup />
+        </div>
+
+        <div className="flex flex-col gap-2 [&>input]:mb-3 mt-4">
           <Label htmlFor="email">Email</Label>
           <Input name="email" placeholder="you@example.com" required />
           <Label htmlFor="password">Password</Label>

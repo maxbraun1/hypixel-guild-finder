@@ -4,7 +4,11 @@ import { Button } from "@/components/ui/button";
 import { createClient } from "@/utils/supabase/client";
 import Image from "next/image";
 
-export function GoogleSigninButton() {
+export function GoogleSigninButton({
+  signup,
+}: {
+  signup?: boolean | undefined;
+}) {
   const supabase = createClient();
 
   function googleLogin() {
@@ -32,7 +36,7 @@ export function GoogleSigninButton() {
         height={20}
         alt="Google logo"
       />
-      Sign in with Google
+      {signup ? "Sign up" : "Sign in"} with Google
     </Button>
   );
 }
