@@ -13,8 +13,6 @@ export function GoogleSigninButton() {
       : "https://hypixelguildfinder.com";
     const redirectURL = rootURL + "/auth/callback/google";
 
-    console.log("redirectURL", redirectURL);
-
     supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
