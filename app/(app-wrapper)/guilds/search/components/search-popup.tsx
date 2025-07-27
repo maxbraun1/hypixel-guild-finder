@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { SlidersHorizontal } from "lucide-react";
+import { CheckIcon, ChevronsUpDownIcon, SlidersHorizontal } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -22,12 +22,27 @@ import { gameTypes } from "@/lib/game-types";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+import { cn } from "@/lib/utils";
 
 export default function SearchPopup() {
   const [open, setOpen] = useState(false);
   const [term, setTerm] = useState("");
   const [guildSize, setGuildSize] = useState<null | string>(null); // 0-20, 21-80, 81+
   const [topGame, setTopGame] = useState<null | string>(null);
+  const [topGameSelectorOpen, setTopGameSelectorOpen] = useState(false);
   const { queryParams, setQueryParams } = useQueryParams();
 
   useEffect(() => {
@@ -76,23 +91,60 @@ export default function SearchPopup() {
               />
               <Separator />
               <div className="space-y-1">
-                <Label>Top Played Game</Label>
-                <Select value={topGame || undefined} onValueChange={setTopGame}>
-                  <SelectTrigger className="w-[220px]">
-                    <SelectValue placeholder="Top Game" />
-                  </SelectTrigger>
-                  <SelectContent className="max-h-48">
-                    {gameTypes.map((game, idx) => (
-                      <SelectItem
-                        className="cursor-pointer"
-                        key={`game-${idx}`}
-                        value={game.value}
-                      >
-                        {game.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <Label className="w-full block mb-1">Top Played Game</Label>
+                <Popover
+                  open={topGameSelectorOpen}
+                  onOpenChange={setTopGameSelectorOpen}
+                  modal={true}
+                >
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      aria-expanded={topGameSelectorOpen}
+                      className="w-[200px] justify-between"
+                    >
+                      {topGame
+                        ? gameTypes.find(
+                            (gameType) => gameType.value === topGame
+                          )?.name
+                        : "Select game..."}
+                      <ChevronsUpDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-[200px] p-0">
+                    <Command>
+                      <CommandInput placeholder="Search game..." />
+                      <CommandList>
+                        <CommandEmpty>No game found.</CommandEmpty>
+                        <CommandGroup>
+                          {gameTypes.map((gameType) => (
+                            <CommandItem
+                              key={gameType.value}
+                              value={gameType.value}
+                              onSelect={(currentValue) => {
+                                setTopGame(
+                                  currentValue === topGame ? "" : currentValue
+                                );
+                                setTopGameSelectorOpen(false);
+                              }}
+                            >
+                              <CheckIcon
+                                className={cn(
+                                  "mr-2 h-4 w-4",
+                                  topGame === gameType.value
+                                    ? "opacity-100"
+                                    : "opacity-0"
+                                )}
+                              />
+                              {gameType.name}
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
               </div>
               <div className="space-y-1">
                 <Label>Guild Size</Label>
