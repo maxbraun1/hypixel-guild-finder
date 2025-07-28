@@ -84,6 +84,10 @@ export default function RootLayout({
             <Link className="text-purple-400" href="/contact">
               Contact Me
             </Link>
+            &mdash;
+            <Link className="text-purple-400" href="/privacy-policy">
+              Privacy Policy
+            </Link>
           </footer>
         </main>
         <Toaster />
