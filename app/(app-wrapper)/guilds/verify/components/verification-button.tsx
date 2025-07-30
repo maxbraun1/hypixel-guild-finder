@@ -73,42 +73,38 @@ export default function VerificationButton() {
             <AlertDialogTitle className="flex items-center gap-2">
               Verify Guild
             </AlertDialogTitle>
-            <AlertDialogDescription className="text-md">
-              Add this code to your{" "}
-              <span className="font-bold text-purple-400">
-                guild description
-              </span>{" "}
-              using this command:
-              <br />
-              <span className="bg-black border rounded font-mono p-1.5 my-1 w-fit flex items-center gap-2">
-                /g settings description{" "}
-                <span className="text-purple-500">{code}</span>
-                <ClipboardCopy
-                  onClick={() => {
-                    navigator.clipboard.writeText(
-                      "/g settings description " + code
-                    );
-                  }}
-                  size={20}
-                  className="cursor-pointer"
-                />
-              </span>
-              <br />
-              <br />
-              Once you've added the code, click Verify.
-              <div className="my-5 bg-black rounded p-3 flex justify-between items-center">
-                <p className="text-purple-500 text-4xl font-black tracking-widest">
-                  {code}
-                </p>
-                <ClipboardCopy
-                  onClick={() => {
-                    navigator.clipboard.writeText(code);
-                  }}
-                  size={30}
-                  className="cursor-pointer"
-                />
-              </div>
-            </AlertDialogDescription>
+            Add this code to your{" "}
+            <span className="font-bold text-purple-400">guild description</span>{" "}
+            using this command:
+            <br />
+            <span className="bg-black border rounded font-mono p-1.5 my-1 w-fit flex items-center gap-2">
+              /g settings description{" "}
+              <span className="text-purple-500">{code}</span>
+              <ClipboardCopy
+                onClick={() => {
+                  navigator.clipboard.writeText(
+                    "/g settings description " + code
+                  );
+                }}
+                size={20}
+                className="cursor-pointer"
+              />
+            </span>
+            <br />
+            <br />
+            Once you've added the code, click Verify.
+            <div className="my-5 bg-black rounded p-3 flex justify-between items-center">
+              <p className="text-purple-500 text-4xl font-black tracking-widest">
+                {code}
+              </p>
+              <ClipboardCopy
+                onClick={() => {
+                  navigator.clipboard.writeText(code);
+                }}
+                size={30}
+                className="cursor-pointer"
+              />
+            </div>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
