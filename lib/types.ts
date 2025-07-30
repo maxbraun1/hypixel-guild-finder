@@ -43,6 +43,7 @@ interface guild {
   description: string | null;
   h_description: string;
   discord_link: string | null;
+  hypixel_forum_link: string | null;
   owner_username: string;
   top_game_1: { name: string; exp: number };
   top_game_2: { name: string; exp: number };
@@ -60,6 +61,7 @@ interface request {
 }
 
 interface guild_settings {
-  discord_link?: string | null;
   description?: string | null;
+  discord_link?: string | null;
+  hypixel_forum_link?: string | null;
 }

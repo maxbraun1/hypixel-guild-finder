@@ -21,6 +21,11 @@ import { useToast } from "@/hooks/use-toast";
 import { Check, LoaderCircle } from "lucide-react";
 
 const formSchema = z.object({
+  description: z
+    .string()
+    .max(10000, "Description cannot be more than 10,000 characters")
+    .optional()
+    .or(z.literal("")),
   discord_link: z
     .string()
     .regex(
@@ -31,9 +36,12 @@ const formSchema = z.object({
     )
     .optional()
     .or(z.literal("")),
-  description: z
+  hypixel_forum_link: z
     .string()
-    .max(10000, "Description cannot be more than 10,000 characters")
+    .regex(
+      new RegExp("^https://hypixel.net/threads/.*"),
+      'Hypixel Forums link must start with "https://hypixel.net/forums/"'
+    )
     .optional()
     .or(z.literal("")),
 });
@@ -50,8 +58,9 @@ export default function GuildSettingsForm({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      discord_link: current_values?.discord_link || "",
       description: current_values?.description || "",
+      discord_link: current_values?.discord_link || "",
+      hypixel_forum_link: current_values?.hypixel_forum_link || "",
     },
   });
 
@@ -116,6 +125,29 @@ export default function GuildSettingsForm({
               <FormControl>
                 <Input
                   placeholder="https://discord.gg/abcdeABCDE"
+                  {...field}
+                  className="w-full max-w-sm"
+                />
+              </FormControl>
+              <FormMessage className="text-red-400 mt-2" />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="hypixel_forum_link"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-lg !text-white">
+                Hypixel Forum Link
+              </FormLabel>
+              <FormDescription className="!m-0">
+                A link to your guild post on the official Hypixel Forums
+              </FormDescription>
+              <FormControl>
+                <Input
+                  placeholder="https://hypixel.net/threads/join-my-guild.1234567"
                   {...field}
                   className="w-full max-w-sm"
                 />
