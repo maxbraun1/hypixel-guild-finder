@@ -57,6 +57,7 @@ export default async function Index() {
           width={2000}
           height={2000}
           alt=""
+          priority
           className="w-full h-full absolute -z-10 top-0 left-0 object-cover blur-md brightness-50 scale-110"
         />
         <h1 className="text-7xl font-black">FIND YOUR GUILD</h1>

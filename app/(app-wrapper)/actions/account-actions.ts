@@ -125,9 +125,20 @@ export async function getGuildSettings() {
 }
 
 export async function setGuildSettings(settings: guild_settings) {
-  console.log(settings);
   const supabase = await createClient();
   const user = (await supabase.auth.getUser()).data.user;
+
+  const discord_link_regex =
+    /(?:https?:\/\/)?discord(?:(?:app)?\.com\/invite|\.gg)\/?[a-zA-Z0-9]+\/?/;
+  const hypixel_forum_link_regex = /^https:\/\/hypixel\.net\/threads\/.*/;
+
+  if (settings.discord_link && !discord_link_regex.test(settings.discord_link))
+    return null;
+  if (
+    settings.hypixel_forum_link &&
+    !hypixel_forum_link_regex.test(settings.hypixel_forum_link)
+  )
+    return null;
 
   if (!user) return null;
 
@@ -138,6 +149,7 @@ export async function setGuildSettings(settings: guild_settings) {
     .update({
       description: settings.description,
       discord_link: settings.discord_link,
+      hypixel_forum_link: settings.hypixel_forum_link,
     })
     .eq("id", id)
     .select();

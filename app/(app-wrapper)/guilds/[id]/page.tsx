@@ -7,7 +7,7 @@ import NotFound from "./components/not-found";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import DiscordLogo from "@/public/assets/discord-icon.webp";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, MessagesSquare } from "lucide-react";
 import Link from "next/link";
 import GuildFooter from "./components/guild-footer";
 
@@ -114,20 +114,46 @@ export default async function GuildPage({
             </div>
           </div>
 
-          {guild.discord_link && (
+          {(guild.discord_link || guild.hypixel_forum_link) && (
             <div>
               <h2 className="text-xl font-bold mb-3">Guild Links</h2>
-              <a href={guild.discord_link} target="_blank">
-                <Button variant="secondary" className="flex gap-2">
-                  <Image
-                    width={25}
-                    height={25}
-                    src={DiscordLogo}
-                    alt="Discord logo"
-                  />
-                  Discord Server
-                </Button>
-              </a>
+              <div className="space-y-3">
+                {guild.discord_link && (
+                  <a
+                    href={guild.discord_link}
+                    className="block"
+                    target="_blank"
+                  >
+                    <Button
+                      variant="secondary"
+                      className="flex gap-2 px-3 border-2 border-[#5865f2] hover:bg-[#5865f2]"
+                    >
+                      <Image
+                        width={25}
+                        height={25}
+                        src={DiscordLogo}
+                        alt="Discord logo"
+                      />
+                      Discord Server
+                    </Button>
+                  </a>
+                )}
+                {guild.hypixel_forum_link && (
+                  <a
+                    className="block"
+                    href={guild.hypixel_forum_link}
+                    target="_blank"
+                  >
+                    <Button
+                      variant="secondary"
+                      className="flex gap-2 border-2 border-[#ca9c32] px-3 hover:bg-[#ca9c32]"
+                    >
+                      <MessagesSquare />
+                      Hypixel Forums Post
+                    </Button>
+                  </a>
+                )}
+              </div>
             </div>
           )}
         </div>
