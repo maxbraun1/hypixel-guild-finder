@@ -58,7 +58,7 @@ async function PrimaryButton() {
     // if guild is added and verified
     return (
       <Link href={`/guilds/${guild.hypixel_id}`}>
-        <Button className="h-auto py-1.5 px-3 flex gap-2">
+        <Button className="h-auto py-1.5 px-3 flex gap-1">
           <Eye size={18} /> View Your Guild
         </Button>
       </Link>
