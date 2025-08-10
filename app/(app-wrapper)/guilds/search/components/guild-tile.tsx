@@ -39,7 +39,7 @@ export default function GuildTile({ guild }: { guild: guild }) {
           </div>
         </div>
         {wasWithinLast14Days(Number(guild.owner_last_login)) && (
-          <Tooltip>
+          <Tooltip delayDuration={300}>
             <TooltipTrigger asChild>
               <p className="bg-amber-500 w-fit px-1 rounded text-xs mt-1.5 py-0.5 flex gap-0.5 items-center">
                 Online Recently <Info size={11} />

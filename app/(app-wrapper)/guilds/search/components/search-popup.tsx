@@ -14,6 +14,7 @@ import {
   CheckIcon,
   ChevronsUpDownIcon,
   Info,
+  Search,
   SlidersHorizontal,
 } from "lucide-react";
 import {
@@ -62,7 +63,14 @@ export default function SearchPopup() {
   }, [queryParams]);
 
   function search() {
-    setQueryParams({ term, topGame, guildSize, recentlyOnline });
+    const recentlyOnlineQuery = recentlyOnline ? recentlyOnline : undefined;
+    const searchTermQuery = term.length > 0 ? term : undefined;
+    setQueryParams({
+      term: searchTermQuery,
+      topGame,
+      guildSize,
+      recentlyOnline: recentlyOnlineQuery,
+    });
     close();
   }
 
@@ -90,157 +98,154 @@ export default function SearchPopup() {
       </Button>
 
       <AlertDialog open={open}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle className="mb-2">
+        <AlertDialogContent className="p-0">
+          <AlertDialogHeader className="p-5 pb-0">
+            <AlertDialogTitle className="leading-4">
               Filter & Search
             </AlertDialogTitle>
-            <div className="space-y-5 text-left">
-              <Input
-                className="w-full"
-                value={term}
-                onChange={(e) => setTerm(e.target.value)}
-                placeholder="Search term..."
-              />
-              <Separator />
-              <div className="space-y-1">
-                <Label className="w-full block mb-1">Top Played Game</Label>
-                <Popover
-                  open={topGameSelectorOpen}
-                  onOpenChange={setTopGameSelectorOpen}
-                  modal={true}
-                >
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      role="combobox"
-                      aria-expanded={topGameSelectorOpen}
-                      className="w-[200px] justify-between"
-                    >
-                      {topGame
-                        ? gameTypes.find(
-                            (gameType) => gameType.value === topGame
-                          )?.name
-                        : "Select game..."}
-                      <ChevronsUpDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-[200px] p-0">
-                    <Command>
-                      <CommandInput placeholder="Search game..." />
-                      <CommandList>
-                        <CommandEmpty>No game found.</CommandEmpty>
-                        <CommandGroup>
-                          {gameTypes.map((gameType) => (
-                            <CommandItem
-                              key={gameType.value}
-                              value={gameType.value}
-                              onSelect={(currentValue) => {
-                                setTopGame(
-                                  currentValue === topGame ? "" : currentValue
-                                );
-                                setTopGameSelectorOpen(false);
-                              }}
-                            >
-                              <CheckIcon
-                                className={cn(
-                                  "mr-2 h-4 w-4",
-                                  topGame === gameType.value
-                                    ? "opacity-100"
-                                    : "opacity-0"
-                                )}
-                              />
-                              {gameType.name}
-                            </CommandItem>
-                          ))}
-                        </CommandGroup>
-                      </CommandList>
-                    </Command>
-                  </PopoverContent>
-                </Popover>
-              </div>
-              <div className="space-y-1">
-                <Label>Guild Size</Label>
-                <Select
-                  value={guildSize || undefined}
-                  onValueChange={setGuildSize}
-                >
-                  <SelectTrigger className="w-[220px]">
-                    <SelectValue placeholder="Player Count" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="small">
-                      0-20 Members{" "}
-                      <span className="text-xs text-neutral-400 ml-2">
-                        Small
-                      </span>
-                    </SelectItem>
-                    <SelectItem value="medium">
-                      21-80 Members{" "}
-                      <span className="text-xs text-neutral-400 ml-2">
-                        Medium
-                      </span>
-                    </SelectItem>
-                    <SelectItem value="large">
-                      81+ Members{" "}
-                      <span className="text-xs text-neutral-400 ml-2">
-                        Large
-                      </span>
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-1">
-                <Label className="flex gap-1.5 items-center">
-                  <div className="inline-flex items-center">
-                    <label className="flex items-center cursor-pointer relative">
-                      <input
-                        type="checkbox"
-                        checked={recentlyOnline}
-                        onChange={(event) =>
-                          setRecentlyOnline(event.target.checked)
-                        }
-                        className="peer h-5 w-5 cursor-pointer transition-all appearance-none rounded shadow hover:shadow-md border border-slate-300 checked:bg-purple-600 checked:border-purple-600"
-                      />
-                      <span className="absolute text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-3.5 w-3.5"
-                          viewBox="0 0 20 20"
-                          fill="currentColor"
-                          stroke="currentColor"
-                          strokeWidth="1"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                            clipRule="evenodd"
-                          ></path>
-                        </svg>
-                      </span>
-                    </label>
-                  </div>
-                  Recently Online
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Info size={14} />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p className="text-xs max-w-sm">
-                        This badge indicates that the owner of this guild has
-                        logged into Hypixel within the last 2 weeks, according
-                        to the Hypixel API.
-                      </p>
-                    </TooltipContent>
-                  </Tooltip>
-                  <p className="border text-[10px] border-purple-500 text-purple-500 rounded-full py-0.5 px-1">
-                    New
-                  </p>
-                </Label>
-              </div>
-            </div>
           </AlertDialogHeader>
-          <AlertDialogFooter className="flex flex-row justify-between sm:justify-between">
+
+          <div className="space-y-5 text-left px-5">
+            <Input
+              className="w-full"
+              value={term}
+              onChange={(e) => setTerm(e.target.value)}
+              placeholder="Search term..."
+            />
+
+            <div className="space-y-1">
+              <Label className="w-full block mb-1">Top Played Game</Label>
+              <Popover
+                open={topGameSelectorOpen}
+                onOpenChange={setTopGameSelectorOpen}
+                modal={true}
+              >
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    role="combobox"
+                    aria-expanded={topGameSelectorOpen}
+                    className="w-[200px] justify-between"
+                  >
+                    {topGame
+                      ? gameTypes.find((gameType) => gameType.value === topGame)
+                          ?.name
+                      : "Select game..."}
+                    <ChevronsUpDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-[200px] p-0">
+                  <Command>
+                    <CommandInput placeholder="Search game..." />
+                    <CommandList>
+                      <CommandEmpty>No game found.</CommandEmpty>
+                      <CommandGroup>
+                        {gameTypes.map((gameType) => (
+                          <CommandItem
+                            key={gameType.value}
+                            value={gameType.value}
+                            onSelect={(currentValue) => {
+                              setTopGame(
+                                currentValue === topGame ? "" : currentValue
+                              );
+                              setTopGameSelectorOpen(false);
+                            }}
+                          >
+                            <CheckIcon
+                              className={cn(
+                                "mr-2 h-4 w-4",
+                                topGame === gameType.value
+                                  ? "opacity-100"
+                                  : "opacity-0"
+                              )}
+                            />
+                            {gameType.name}
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
+            </div>
+            <div className="space-y-1">
+              <Label>Guild Size</Label>
+              <Select
+                value={guildSize || undefined}
+                onValueChange={setGuildSize}
+              >
+                <SelectTrigger className="w-[220px]">
+                  <SelectValue placeholder="Player Count" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="small">
+                    0-20 Members{" "}
+                    <span className="text-xs text-neutral-400 ml-2">Small</span>
+                  </SelectItem>
+                  <SelectItem value="medium">
+                    21-80 Members{" "}
+                    <span className="text-xs text-neutral-400 ml-2">
+                      Medium
+                    </span>
+                  </SelectItem>
+                  <SelectItem value="large">
+                    81+ Members{" "}
+                    <span className="text-xs text-neutral-400 ml-2">Large</span>
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-1">
+              <Label className="flex gap-1.5 items-center">
+                <div className="inline-flex items-center">
+                  <label className="flex items-center cursor-pointer relative">
+                    <input
+                      type="checkbox"
+                      checked={recentlyOnline}
+                      onChange={(event) =>
+                        setRecentlyOnline(event.target.checked)
+                      }
+                      className="peer h-5 w-5 cursor-pointer transition-all appearance-none rounded shadow hover:shadow-md border border-slate-300 checked:bg-purple-600 checked:border-purple-600"
+                    />
+                    <span className="absolute text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-3.5 w-3.5"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                        stroke="currentColor"
+                        strokeWidth="1"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        ></path>
+                      </svg>
+                    </span>
+                  </label>
+                </div>
+                Recently Online
+                <Tooltip delayDuration={300}>
+                  <TooltipTrigger asChild>
+                    <Info size={14} />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p className="text-xs max-w-sm">
+                      This indicates that the owner of this guild has logged
+                      into Hypixel within the last 2 weeks, according to the
+                      Hypixel API.
+                    </p>
+                  </TooltipContent>
+                </Tooltip>
+                <p className="border text-[10px] border-purple-500 text-purple-500 rounded-full py-0.5 px-1">
+                  New
+                </p>
+              </Label>
+            </div>
+          </div>
+
+          <AlertDialogFooter className="flex p-5 border-t flex-row justify-between sm:justify-between">
             <Link href="/guilds/search">
               <Button variant="outline">Reset Filters</Button>
             </Link>
@@ -248,7 +253,13 @@ export default function SearchPopup() {
               <Button onClick={() => close()} variant="secondary">
                 Cancel
               </Button>
-              <Button onClick={() => search()}>Search</Button>
+              <Button
+                className="flex gap-1 items-center"
+                onClick={() => search()}
+              >
+                <Search size={15} />
+                Filter
+              </Button>
             </div>
           </AlertDialogFooter>
         </AlertDialogContent>
