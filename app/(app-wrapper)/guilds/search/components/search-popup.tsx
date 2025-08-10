@@ -10,7 +10,12 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { CheckIcon, ChevronsUpDownIcon, SlidersHorizontal } from "lucide-react";
+import {
+  CheckIcon,
+  ChevronsUpDownIcon,
+  Info,
+  SlidersHorizontal,
+} from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -36,6 +41,12 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import { cn } from "@/lib/utils";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export default function SearchPopup() {
   const [open, setOpen] = useState(false);
@@ -43,6 +54,7 @@ export default function SearchPopup() {
   const [guildSize, setGuildSize] = useState<null | string>(null); // 0-20, 21-80, 81+
   const [topGame, setTopGame] = useState<null | string>(null);
   const [topGameSelectorOpen, setTopGameSelectorOpen] = useState(false);
+  const [recentlyOnline, setRecentlyOnline] = useState(false);
   const { queryParams, setQueryParams } = useQueryParams();
 
   useEffect(() => {
@@ -50,7 +62,7 @@ export default function SearchPopup() {
   }, [queryParams]);
 
   function search() {
-    setQueryParams({ term, topGame, guildSize });
+    setQueryParams({ term, topGame, guildSize, recentlyOnline });
     close();
   }
 
@@ -64,6 +76,7 @@ export default function SearchPopup() {
     setTerm(queryParams.get("term") || "");
     setGuildSize(queryParams.get("guildSize"));
     setTopGame(queryParams.get("topGame"));
+    setRecentlyOnline(queryParams.get("recentlyOnline") !== null);
   }
 
   return (
@@ -176,6 +189,54 @@ export default function SearchPopup() {
                     </SelectItem>
                   </SelectContent>
                 </Select>
+              </div>
+              <div className="space-y-1">
+                <Label className="flex gap-1.5 items-center">
+                  <div className="inline-flex items-center">
+                    <label className="flex items-center cursor-pointer relative">
+                      <input
+                        type="checkbox"
+                        checked={recentlyOnline}
+                        onChange={(event) =>
+                          setRecentlyOnline(event.target.checked)
+                        }
+                        className="peer h-5 w-5 cursor-pointer transition-all appearance-none rounded shadow hover:shadow-md border border-slate-300 checked:bg-purple-600 checked:border-purple-600"
+                      />
+                      <span className="absolute text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-3.5 w-3.5"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                          stroke="currentColor"
+                          strokeWidth="1"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                            clipRule="evenodd"
+                          ></path>
+                        </svg>
+                      </span>
+                    </label>
+                  </div>
+                  Recently Online
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Info size={14} />
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p className="text-xs max-w-sm">
+                        This badge indicates that the owner of this guild has
+                        logged into Hypixel within the last 2 weeks, according
+                        to the Hypixel API.
+                      </p>
+                    </TooltipContent>
+                  </Tooltip>
+                  <p className="border text-[10px] border-purple-500 text-purple-500 rounded-full py-0.5 px-1">
+                    New
+                  </p>
+                </Label>
               </div>
             </div>
           </AlertDialogHeader>

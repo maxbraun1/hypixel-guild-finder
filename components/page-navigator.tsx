@@ -3,7 +3,6 @@
 import { cn } from "@/lib/utils";
 import useQueryParams from "@/utils/useQueryParams";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import Image from "next/image";
 import React from "react";
 
 export default function PageNavigator({
@@ -13,7 +12,7 @@ export default function PageNavigator({
   currentPage: number;
   pageCount: number;
 }) {
-  const { queryParams, setQueryParams } = useQueryParams();
+  const { setQueryParams } = useQueryParams();
   let buttons: Array<React.JSX.Element> = [];
 
   if (pageCount < 2) return null;
@@ -60,26 +59,26 @@ export default function PageNavigator({
 
   return (
     <div className="w-full flex justify-center mt-10">
-      <div className="border rounded-full h-9 flex overflow-hidden justify-between w-full max-w-lg">
+      <div className="border rounded-full h-7 flex overflow-hidden justify-between w-full max-w-lg">
         <div
           onClick={() => lastPage()}
           className={cn(
-            "basis-full text-center leading-8 cursor-pointer flex items-center justify-center hover:bg-neutral-800",
+            "basis-full text-center cursor-pointer flex items-center justify-center hover:bg-neutral-800",
             currentPage <= 1 && "opacity-30 cursor-default hover:bg-neutral-800"
           )}
         >
-          <ArrowLeft />
+          <ArrowLeft size={15} />
         </div>
         {buttons.map((button) => button)}
         <div
           onClick={() => nextPage()}
           className={cn(
-            "basis-full text-center leading-8 cursor-pointer flex items-center justify-center hover:bg-neutral-800",
+            "basis-full text-center cursor-pointer flex items-center justify-center hover:bg-neutral-800",
             currentPage === pageCount &&
               "opacity-30 cursor-default hover:bg-neutral-800"
           )}
         >
-          <ArrowRight />
+          <ArrowRight size={15} />
         </div>
       </div>
     </div>
@@ -87,12 +86,12 @@ export default function PageNavigator({
 }
 
 function PageButton({ active, number }: { active: boolean; number: number }) {
-  const { queryParams, setQueryParams } = useQueryParams();
+  const { setQueryParams } = useQueryParams();
 
   return (
     <div
       className={cn(
-        "basis-full text-center leading-8 cursor-pointer hover:bg-neutral-800",
+        "basis-full flex items-center justify-center text-sm cursor-pointer hover:bg-neutral-800",
         active && " bg-purple-800 text-white hover:bg-purple-900"
       )}
       onClick={() => {

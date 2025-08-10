@@ -2,7 +2,7 @@ import { sendRequestReminderEmails } from "@/app/(app-wrapper)/actions/guild-act
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
-  console.log("running cron job");
+  console.log("Running request reminder cron job");
   const authHeader = request.headers.get("authorization");
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
     return new Response("Unauthorized", {

@@ -314,22 +314,17 @@ export async function getTopGuilds() {
   return guilds as guild[];
 }
 
-export async function guildSearch(
-  term: string | null,
-  topGame: string | null,
-  guildSize: string | null,
-  page: number | null
-) {
+export async function guildSearch(searchData: guild_search_data) {
   // Number of results to return per page
   const resultsPerPage = 12;
 
   const guildSizeValues = ["small", "medium", "large"];
   if (
-    guildSize !== "small" &&
-    guildSize !== "medium" &&
-    guildSize !== "large"
+    searchData.guildSize !== "small" &&
+    searchData.guildSize !== "medium" &&
+    searchData.guildSize !== "large"
   ) {
-    guildSize = null;
+    searchData.guildSize = null;
   }
   // guild sizes
   const sizes = {
@@ -345,25 +340,33 @@ export async function guildSearch(
     .order("members_count", { ascending: false })
     .eq("verified", true);
 
-  if (term) {
-    query = query.textSearch("name", term, {
+  if (searchData.term) {
+    query = query.textSearch("name", searchData.term, {
       type: "plain",
       config: "english",
     });
   }
 
-  if (guildSize) {
+  if (searchData.guildSize) {
     query
-      .gte("members_count", sizes[guildSize][0])
-      .lte("members_count", sizes[guildSize][1]);
+      .gte("members_count", sizes[searchData.guildSize][0])
+      .lte("members_count", sizes[searchData.guildSize][1]);
   }
 
-  if (topGame) {
-    query.eq("top_game_1->name", JSON.stringify(topGame));
+  if (searchData.topGame) {
+    query.eq("top_game_1->name", JSON.stringify(searchData.topGame));
   }
 
-  if (page) {
-    query.range(resultsPerPage * (page - 1), resultsPerPage * page - 1);
+  if (searchData.recentlyOnline) {
+    const UTC14DaysAgo = Date.now() - 14 * 24 * 60 * 60 * 1000;
+    query.gt("owner_last_login", UTC14DaysAgo);
+  }
+
+  if (searchData.page) {
+    query.range(
+      resultsPerPage * (searchData.page - 1),
+      resultsPerPage * searchData.page - 1
+    );
   } else {
     query.range(0, resultsPerPage - 1);
   }
@@ -447,4 +450,57 @@ export async function sendRequestReminderEmails() {
     }
   }
   return guildsWithProfiles.length;
+}
+
+export async function updateGuildActivity() {
+  const supabase = await createClient();
+
+  let query = await supabase.from("guilds").select().eq("verified", true);
+
+  const guilds = query.data as guild[];
+
+  for (let guild of guilds) {
+    // get uuid from username
+    const uuid = await axios
+      .get(
+        `https://api.mojang.com/users/profiles/minecraft/${guild.owner_username}`
+      )
+      .then((response) => {
+        return response.data.id;
+      })
+      .catch((err) => {
+        console.log(err);
+        return null;
+      });
+
+    if (!uuid) continue;
+
+    const ownerLastLogin = await axios
+      .get(
+        `https://api.hypixel.net/v2/player?key=${process.env.HYPIXEL_KEY}&uuid=${uuid}`
+      )
+      .then((response) => {
+        if (response.data.success) {
+          return response.data.player.lastLogin as number | null;
+        } else return false;
+      })
+      .catch((err) => {
+        console.log(err.response.data);
+        return false;
+      });
+
+    if (ownerLastLogin) {
+      console.log("Updating DB. Owner last login: ", ownerLastLogin);
+      const { error } = await supabase
+        .from("guilds")
+        .update({
+          owner_last_login: ownerLastLogin,
+        })
+        .eq("id", guild.id);
+
+      error && console.log(error);
+    }
+  }
+
+  return true;
 }
