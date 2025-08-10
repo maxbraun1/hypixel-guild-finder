@@ -54,3 +54,11 @@ export function formatGameName(gameName: string): string {
   );
   return formattedWords.join(" ");
 }
+
+export function wasWithinLast14Days(unixTimestamp: number) {
+  if (!unixTimestamp) return;
+  const now = Date.now();
+  const sevenDaysAgo = now - 14 * 24 * 60 * 60 * 1000;
+
+  return unixTimestamp >= sevenDaysAgo && unixTimestamp <= now;
+}

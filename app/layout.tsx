@@ -4,6 +4,7 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import Script from "next/script";
 import { GoogleAnalytics } from "@next/third-parties/google";
+import updateOwnerActivity from "@/lib/cron/ownerActivity";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -26,6 +27,8 @@ export const metadata = {
     ],
   },
 };
+
+//updateOwnerActivity();
 
 export default function RootLayout({
   children,

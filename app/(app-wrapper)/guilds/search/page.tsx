@@ -24,14 +24,23 @@ export default function Guilds() {
     const term = queryParams.get("term");
     const topGame = queryParams.get("topGame");
     const guildSize = queryParams.get("guildSize");
+    const recentlyOnline = queryParams.get("recentlyOnline");
     const page = Number(queryParams.get("page"));
 
-    guildSearch(term, topGame, guildSize, page).then((response) => {
+    const searchData: guild_search_data = {
+      term,
+      topGame,
+      guildSize,
+      recentlyOnline,
+      page,
+    };
+
+    guildSearch(searchData).then((response) => {
       setLoading(false);
       if (response.error) {
         console.log(response.error);
       } else {
-        setPageCount(response.count / response.perPage);
+        setPageCount(Math.ceil(response.count / response.perPage));
         setGuilds(response.data);
       }
     });

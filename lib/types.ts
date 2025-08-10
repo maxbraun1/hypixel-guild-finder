@@ -48,6 +48,7 @@ interface guild {
   top_game_1: { name: string; exp: number };
   top_game_2: { name: string; exp: number };
   top_game_3: { name: string; exp: number };
+  owner_last_login: string;
 }
 
 interface request {
@@ -64,4 +65,12 @@ interface guild_settings {
   description?: string | null;
   discord_link?: string | null;
   hypixel_forum_link?: string | null;
+}
+
+interface guild_search_data {
+  term: string | null;
+  topGame: string | null;
+  guildSize: string | null;
+  recentlyOnline: string | null;
+  page: number | null;
 }

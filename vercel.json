@@ -1,7 +1,11 @@
 {
   "crons": [
     {
-      "path": "/api/cron",
+      "path": "/api/cron/guild-activity",
+      "schedule": "0 0 * * *"
+    },
+    {
+      "path": "/api/cron/request-reminder",
       "schedule": "0 12 * * 6"
     }
   ]
