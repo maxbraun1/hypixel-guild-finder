@@ -1,8 +1,8 @@
-import { updateGuildActivity } from "@/app/(app-wrapper)/actions/guild-actions";
+import { sendRequestReminderEmails } from "@/app/(app-wrapper)/actions/guild-actions";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
-  console.log("Running guild activity cron job");
+  console.log("Running request reminder cron job");
   const authHeader = request.headers.get("authorization");
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
     return new Response("Unauthorized", {
@@ -10,14 +10,19 @@ export async function GET(request: NextRequest) {
     });
   }
 
-  const response = await updateGuildActivity();
+  const response = await sendRequestReminderEmails();
 
   if (response)
     return NextResponse.json({
-      message: "Cron Job Ran at " + new Date() + ".",
+      message:
+        "Cron Job Ran at " +
+        new Date() +
+        ". Attempted to send emails to " +
+        response +
+        " guild owners.",
     });
 
   return NextResponse.json({
-    message: "Cron Job Failed at " + new Date() + ".",
+    message: "Cron Job Ran at " + new Date() + " but failed.",
   });
 }
