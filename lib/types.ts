@@ -62,6 +62,7 @@ interface request {
 }
 
 interface guild_settings {
+  accepting_members: boolean;
   description?: string | null;
   discord_link?: string | null;
   hypixel_forum_link?: string | null;

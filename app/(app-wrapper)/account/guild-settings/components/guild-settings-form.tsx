@@ -19,8 +19,10 @@ import TextEditor from "./text-editor";
 import { setGuildSettings } from "@/app/(app-wrapper)/actions/account-actions";
 import { useToast } from "@/hooks/use-toast";
 import { Check, LoaderCircle } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
 
 const formSchema = z.object({
+  accepting_members: z.boolean().default(true),
   description: z
     .string()
     .max(10000, "Description cannot be more than 10,000 characters")
@@ -58,6 +60,7 @@ export default function GuildSettingsForm({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      accepting_members: current_values?.accepting_members,
       description: current_values?.description || "",
       discord_link: current_values?.discord_link || "",
       hypixel_forum_link: current_values?.hypixel_forum_link || "",
@@ -152,6 +155,29 @@ export default function GuildSettingsForm({
                   className="w-full max-w-sm"
                 />
               </FormControl>
+              <FormMessage className="text-red-400 mt-2" />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="accepting_members"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-lg !text-white">
+                Accepting Members
+              </FormLabel>
+              <FormDescription className="!m-0">
+                Uncheck this to hide your guild from users.
+              </FormDescription>
+              <FormControl>
+                  <Switch
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                    className="data-[state=checked]:bg-purple-600 data-[state=unchecked]:bg-neutral-600"
+                  />
+                  </FormControl>
               <FormMessage className="text-red-400 mt-2" />
             </FormItem>
           )}

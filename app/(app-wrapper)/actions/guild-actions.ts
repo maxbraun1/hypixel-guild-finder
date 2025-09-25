@@ -318,7 +318,6 @@ export async function guildSearch(searchData: guild_search_data) {
   // Number of results to return per page
   const resultsPerPage = 12;
 
-  const guildSizeValues = ["small", "medium", "large"];
   if (
     searchData.guildSize !== "small" &&
     searchData.guildSize !== "medium" &&
@@ -338,7 +337,8 @@ export async function guildSearch(searchData: guild_search_data) {
     .from("guilds")
     .select("*", { count: "exact" })
     .order("members_count", { ascending: false })
-    .eq("verified", true);
+    .eq("verified", true)
+    .eq("accepting_members", true);
 
   if (searchData.term) {
     query = query.textSearch("name", searchData.term, {
