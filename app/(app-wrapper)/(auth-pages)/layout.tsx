@@ -7,7 +7,7 @@ export default async function Layout({
 }) {
   return (
     <Suspense>
-      <div className="max-w-7xl">{children}</div>
+      <div className="max-w-7xl py-5 flex">{children}</div>
     </Suspense>
   );
 }

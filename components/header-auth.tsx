@@ -1,25 +1,18 @@
+"use client";
+
 import Link from "next/link";
 import { Button } from "./ui/button";
-import { createClient } from "@/utils/supabase/server";
 import { BadgeCheck, Eye, Plus } from "lucide-react";
-import {
-  getGuild,
-  getRequestCount,
-} from "@/app/(app-wrapper)/actions/account-actions";
 import HeaderMenu from "./header-menu";
+import { useUserStore } from "@/lib/stores/user-store";
 
-export default async function AuthButton() {
-  const client = await createClient();
-  const {
-    data: { user },
-  } = await client.auth.getUser();
-  const guild = await getGuild();
-  const request_count = guild ? (await getRequestCount(guild.id)) || 0 : 0;
+export default function AuthButton() {
+  const { user, guild } = useUserStore();
 
   return user ? (
     <div className="flex items-center gap-2">
-      {PrimaryButton()}
-      <HeaderMenu initial_request_count={request_count} guild={!!guild} />
+      {PrimaryButton(guild)}
+      <HeaderMenu />
     </div>
   ) : (
     <div className="flex gap-2">
@@ -33,8 +26,7 @@ export default async function AuthButton() {
   );
 }
 
-async function PrimaryButton() {
-  const guild = await getGuild();
+function PrimaryButton(guild: guild | null) {
 
   if (!guild) {
     // If no guild

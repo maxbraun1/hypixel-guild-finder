@@ -91,7 +91,7 @@ export default function SearchPopup() {
     <>
       <Button
         variant="secondary"
-        className="flex gap-2"
+        className="flex gap-2 bg-neutral-900 border"
         onClick={() => setOpen(true)}
       >
         <SlidersHorizontal size={20} /> Search & Filter

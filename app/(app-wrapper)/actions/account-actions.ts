@@ -116,7 +116,7 @@ export async function getGuildSettings() {
 
   const { data, error } = await supabase
     .from("guilds")
-    .select("description, discord_link, accepting_members")
+    .select("description, discord_link, accepting_members, hypixel_forum_link")
     .eq("owner", user.id)
     .limit(1);
 

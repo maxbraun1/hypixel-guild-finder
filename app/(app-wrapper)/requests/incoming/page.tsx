@@ -16,7 +16,7 @@ export default async function IncomingRequests() {
   const requests = await getRequests();
 
   return (
-    <>
+    <div className="py-5">
       <UpdateRequestCount />
       <h1 className="text-3xl font-bold">Requests</h1>
       <p className="text-sm text-neutral-400 mb-5">
@@ -32,6 +32,6 @@ export default async function IncomingRequests() {
           <p>You don't have any requests yet!</p>
         )}
       </div>
-    </>
+    </div>
   );
 }

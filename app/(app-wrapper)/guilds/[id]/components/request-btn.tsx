@@ -41,7 +41,7 @@ const formSchema = z.object({
     .max(1000, "Message cannot have more than 1000 characters."),
 });
 
-export default function GuildFooter({
+export default function GuildRequestBtn({
   guild_id,
   guild_name,
 }: {

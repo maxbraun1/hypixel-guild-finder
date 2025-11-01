@@ -1,7 +1,4 @@
-import HeaderAuth from "@/components/header-auth";
-import Link from "next/link";
 import "./globals.css";
-import { Toaster } from "@/components/ui/toaster";
 import Script from "next/script";
 import { GoogleAnalytics } from "@next/third-parties/google";
 
@@ -33,7 +30,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="font-roboto" suppressHydrationWarning>
+    <html lang="en" className="font-display" suppressHydrationWarning>
       <head>
         <link
           rel="apple-touch-icon"
@@ -56,41 +53,8 @@ export default function RootLayout({
           ></Script>
         )}
       </head>
-      <body className="bg-background text-foreground">
-        <main className="min-h-screen flex flex-col items-center">
-          <nav className="w-full flex justify-center border-b h-16 bg-neutral-950">
-            <div className="w-full max-w-5xl flex gap-5 justify-between items-center p-3 px-5 text-sm">
-              <div className="items-center">
-                <Link
-                  className="font-pixel uppercase text-2xl leading-4 md:text-4xl"
-                  href={"/"}
-                >
-                  Hypixel Guild Finder
-                </Link>
-              </div>
-              <HeaderAuth />
-            </div>
-          </nav>
-          {children}
-
-          <footer className="w-full flex items-center justify-center border-t mx-auto text-center text-xs gap-4 py-5 bg-neutral-950">
-            <p>
-              Developed by{" "}
-              <a target="_blank" href="https://maxbraun.us">
-                Max Braun
-              </a>
-            </p>{" "}
-            &mdash;
-            <Link className="text-purple-400" href="/contact">
-              Contact Me
-            </Link>
-            &mdash;
-            <Link className="text-purple-400" href="/privacy-policy">
-              Privacy Policy
-            </Link>
-          </footer>
-        </main>
-        <Toaster />
+      <body className="bg-neutral-950 text-foreground">
+        {children}
       </body>
       <GoogleAnalytics gaId="G-32Z6CH2E8L" />
     </html>

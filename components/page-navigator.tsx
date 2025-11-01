@@ -59,7 +59,7 @@ export default function PageNavigator({
 
   return (
     <div className="w-full flex justify-center mt-10">
-      <div className="border rounded-full h-7 flex overflow-hidden justify-between w-full max-w-lg">
+      <div className="border rounded-full h-7 flex overflow-hidden justify-between w-full max-w-lg bg-neutral-900">
         <div
           onClick={() => lastPage()}
           className={cn(

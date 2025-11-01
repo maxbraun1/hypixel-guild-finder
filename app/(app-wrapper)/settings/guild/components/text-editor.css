@@ -10,6 +10,7 @@
   border-top: none !important;
   border-radius: 0 0 5px 5px;
   border-color: #262626 !important;
+  background-color: #171717;
 }
 .ql-editor {
   min-height: 200px;

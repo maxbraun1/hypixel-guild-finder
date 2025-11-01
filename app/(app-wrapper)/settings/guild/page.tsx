@@ -21,10 +21,5 @@ export default async function GuildSettings() {
 
   const guild_settings = await getGuildSettings();
 
-  return (
-    <>
-      <h1 className="text-3xl font-bold mb-5">Guild Settings</h1>
-      <GuildSettingsForm current_values={guild_settings} />
-    </>
-  );
+  return <GuildSettingsForm current_values={guild_settings} />;
 }

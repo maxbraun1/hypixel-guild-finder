@@ -24,7 +24,7 @@ export default function GuildTile({ guild }: { guild: guild }) {
   return (
     <Link
       href={`/guilds/${guild.hypixel_id}`}
-      className="border flex flex-col rounded divide-y w-full"
+      className="border flex flex-col rounded-lg bg-neutral-900 divide-y w-full"
     >
       <div className="p-3">
         <div className="flex justify-between">

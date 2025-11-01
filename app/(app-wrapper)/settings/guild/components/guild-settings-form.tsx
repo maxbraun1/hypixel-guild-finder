@@ -18,7 +18,7 @@ import { useState } from "react";
 import TextEditor from "./text-editor";
 import { setGuildSettings } from "@/app/(app-wrapper)/actions/account-actions";
 import { useToast } from "@/hooks/use-toast";
-import { Check, LoaderCircle } from "lucide-react";
+import { LoaderCircle, Save } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 
 const formSchema = z.object({
@@ -90,13 +90,13 @@ export default function GuildSettingsForm({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="divide-y">
         <FormField
           control={form.control}
           name="description"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-lg !text-white">
+            <FormItem className="py-4">
+              <FormLabel className="text-base">
                 Guild Description
               </FormLabel>
               <FormDescription className="!m-0">
@@ -118,18 +118,21 @@ export default function GuildSettingsForm({
           control={form.control}
           name="discord_link"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-lg !text-white">
-                Discord Link
-              </FormLabel>
-              <FormDescription className="!m-0">
-                Invite link to your guilds Discord server.
-              </FormDescription>
+            <FormItem className="flex flex-col md:flex-row gap-2 items-start py-4">
+              <div className="grow">
+                <FormLabel className="text-base">
+                  Discord Link
+                </FormLabel>
+                <FormDescription className="!m-0">
+                  Invite link to your guilds Discord server.
+                </FormDescription>
+              </div>
+              
               <FormControl>
                 <Input
                   placeholder="https://discord.gg/abcdeABCDE"
                   {...field}
-                  className="w-full max-w-sm"
+                  className="w-full md:max-w-sm !mt-0 bg-neutral-900"
                 />
               </FormControl>
               <FormMessage className="text-red-400 mt-2" />
@@ -141,18 +144,20 @@ export default function GuildSettingsForm({
           control={form.control}
           name="hypixel_forum_link"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-lg !text-white">
-                Hypixel Forum Link
-              </FormLabel>
-              <FormDescription className="!m-0">
-                A link to your guild post on the official Hypixel Forums
-              </FormDescription>
+            <FormItem className="flex flex-col md:flex-row gap-2 items-start py-4">
+              <div className="grow">
+                <FormLabel className="text-base">
+                  Hypixel Forum Link
+                </FormLabel>
+                <FormDescription className="!m-0">
+                  A link to your guild post on the official Hypixel Forums
+                </FormDescription>
+              </div>
               <FormControl>
                 <Input
                   placeholder="https://hypixel.net/threads/join-my-guild.1234567"
                   {...field}
-                  className="w-full max-w-sm"
+                  className="w-full md:max-w-sm !mt-0 bg-neutral-900"
                 />
               </FormControl>
               <FormMessage className="text-red-400 mt-2" />
@@ -164,18 +169,20 @@ export default function GuildSettingsForm({
           control={form.control}
           name="accepting_members"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-lg !text-white">
-                Accepting Members
-              </FormLabel>
-              <FormDescription className="!m-0">
-                Uncheck this to hide your guild from users.
-              </FormDescription>
+            <FormItem className="flex gap-2 items-start py-4">
+              <div className="grow">
+                <FormLabel className="text-base">
+                  Accepting Members
+                </FormLabel>
+                <FormDescription className="!m-0">
+                  Uncheck this to hide your guild from users.
+                </FormDescription>
+              </div>
               <FormControl>
                   <Switch
                     checked={field.value}
                     onCheckedChange={field.onChange}
-                    className="data-[state=checked]:bg-purple-600 data-[state=unchecked]:bg-neutral-600"
+                    className="data-[state=checked]:bg-purple-400 data-[state=unchecked]:bg-neutral-400"
                   />
                   </FormControl>
               <FormMessage className="text-red-400 mt-2" />
@@ -183,12 +190,12 @@ export default function GuildSettingsForm({
           )}
         />
 
-        <Button type="submit" disabled={!updated} className="flex gap-2">
-          Save Settings{" "}
+        <Button type="submit" disabled={!updated} className="flex gap-2 mt-4">
+          Save Settings
           {loading ? (
             <LoaderCircle className="animate-spin" size={18} />
           ) : (
-            <Check size={18} />
+            <Save size={18} />
           )}
         </Button>
       </form>

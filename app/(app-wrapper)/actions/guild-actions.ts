@@ -297,14 +297,21 @@ export async function verifyGuild() {
   return false;
 }
 
-export async function getTopGuilds() {
+export async function getTopGuilds(opt: { limit?: number }) {
   const supabase = await createClient();
 
-  const { data: guilds, error } = await supabase
+  let query = supabase
     .from("guilds")
     .select()
     .order("members_count", { ascending: false })
     .eq("verified", true);
+
+  if (opt.limit) {
+    query = query.limit(opt.limit);
+  }
+
+  
+  const { data: guilds, error } = await query;
 
   if (error || guilds.length < 1) {
     error && console.log(error);

@@ -35,7 +35,7 @@ export default async function Login({
   }
 
   return (
-    <form className="flex-1 flex flex-col min-w-64 max-w-sm border p-5">
+    <form className="flex-1 flex flex-col min-w-64 max-w-sm border p-5 rounded-lg bg-neutral-900">
       <h1 className="text-2xl font-medium">Sign in</h1>
       <p className="text-sm text-foreground">
         Don't have an account?{" "}

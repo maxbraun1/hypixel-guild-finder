@@ -19,7 +19,7 @@ export default function GuildTileFooter({ guild }: { guild: guild }) {
   }, []);
 
   return (
-    <div className="flex bg-neutral-900 justify-between p-3 items-center">
+    <div className="flex justify-between p-3 items-center">
       <div className="flex gap-3 items-center">
         <Image
           className="rounded overflow-hidden"

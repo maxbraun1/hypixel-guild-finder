@@ -121,7 +121,7 @@ export default function MCUsernameForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2 mt-2">
         <FormLabel className="text-lg">Minecraft Username</FormLabel>
         <div className="flex gap-2">
           <Image
