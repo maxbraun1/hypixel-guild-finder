@@ -25,7 +25,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { LoaderCircle, SendHorizonal } from "lucide-react";
 import { sendRequest } from "@/app/(app-wrapper)/actions/account-actions";
 import { toast } from "@/hooks/use-toast";
-import { useRequestStore } from "../request-store";
 
 const formSchema = z.object({
   username: z
@@ -41,18 +40,18 @@ const formSchema = z.object({
     .max(1000, "Message cannot have more than 1000 characters."),
 });
 
-export default function RequestPopup() {
-  const [open, setOpen] = useState(false);
+export default function RequestPopup({
+  open,
+  setOpen,
+  guild_id,
+  guild_name
+} : {
+  open: boolean,
+  setOpen: Function,
+  guild_id: string,
+  guild_name: string,
+}) {
   const [sendButtonLoading, setSendButtonLoading] = useState(false);
-  const { guild_id, guild_name, clear } = useRequestStore();
-
-  useEffect(() => {
-    if (guild_id && guild_name) {
-      setOpen(true);
-    } else {
-      setOpen(false);
-    }
-  }, [guild_id, guild_name]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -71,7 +70,7 @@ export default function RequestPopup() {
           if (response) {
             // success
             form.reset();
-            clear();
+            setOpen(false);
             toast({
               description: "Your request has been sent!",
             });
@@ -116,7 +115,7 @@ export default function RequestPopup() {
                     <FormControl>
                       <Input
                         className="text-white !mt-1"
-                        placeholder="username"
+                        placeholder="Username"
                         {...field}
                       />
                     </FormControl>
@@ -147,7 +146,7 @@ export default function RequestPopup() {
                 <AlertDialogCancel
                   onClick={() => {
                     form.reset();
-                    clear();
+                    setOpen(false);
                   }}
                 >
                   Cancel

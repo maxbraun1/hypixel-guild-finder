@@ -1,25 +1,17 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { createClient } from "@/utils/supabase/client";
 import Image from "next/image";
-import { useEffect, useState } from "react";
-import { useRequestStore } from "../request-store";
+import RequestPopup from "./request-popup";
+import { useState } from "react";
 
 export default function GuildTileFooter({ guild }: { guild: guild }) {
-  const [user, setUser] = useState<any>(null);
-  const { guild_id, guild_name, setGuildId, setGuildName, clear } =
-    useRequestStore();
-
-  useEffect(() => {
-    const supabase = createClient();
-    supabase.auth.getUser().then((user) => {
-      setUser(user.data.user);
-    });
-  }, []);
+  const [requestOpen, setRequestOpen] = useState(false);
 
   return (
-    <div className="flex justify-between p-3 items-center">
+    <>
+      <RequestPopup guild_id={guild.id} guild_name={guild.name} open={requestOpen} setOpen={setRequestOpen}/>
+      <div className="flex justify-between p-3 items-center">
       <div className="flex gap-3 items-center">
         <Image
           className="rounded overflow-hidden"
@@ -38,12 +30,12 @@ export default function GuildTileFooter({ guild }: { guild: guild }) {
         className="text-xs p-2 h-auto"
         onClick={(e) => {
           e.preventDefault();
-          setGuildId(guild.id);
-          setGuildName(guild.name);
+          setRequestOpen(true);
         }}
       >
         Request to Join
       </Button>
     </div>
+    </>
   );
 }

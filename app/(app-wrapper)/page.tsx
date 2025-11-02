@@ -56,16 +56,16 @@ export default async function Index() {
   ];
 
   return (
-    <div className="space-y-14 w-full font-display p-5 lg:p-0">
-      <div className="w-full flex flex-col items-center md:items-start justify-between gap-20 md:gap-10 my-10 bg-neutral-900/50 rounded-xl p-10 md:flex-row">
-        <div className="text-left grow font-display md:max-w-md">
-          <h1 className="text-7xl font-black">FIND YOUR GUILD</h1>
-          <p className="text-neutral-300">
+    <div className="space-y-14 w-full font-display py-5 lg:p-0">
+      <div className="w-full flex flex-col items-center md:items-start justify-between gap-20 md:gap-10 my-10 bg-neutral-900/50 rounded-xl p-5 sm:p-10 md:flex-row">
+        <div className="text-left grow font-display w-full md:max-w-md">
+          <h1 className="text-7xl font-black text-center md:text-left">FIND YOUR GUILD</h1>
+          <p className="text-neutral-300 text-center md:text-left">
             Find the perfect Hypixel guild for you. Connect with like-minded
             players, explore new adventures, and join a community that fits your
             playstyle!
           </p>
-          <div className="flex gap-3 mt-5">
+          <div className="flex gap-3 mt-5 w-full justify-center md:justify-start">
             <Link href="/guilds/search">
               <Button className="text-md flex gap-1 uppercase">
                 <Search size={20} />
@@ -85,7 +85,7 @@ export default async function Index() {
         </div>
         
         { guild && (
-          <div className="w-[300px] rounded-lg shadow-[0px_0px_30px_rgba(168,85,247,0.25)] hover:shadow-[0px_0px_30px_rgba(168,85,247,0.3)] transition-all rotate-3 scale-[120%]">
+          <div className="w-[300px] rounded-lg shadow-[0px_0px_30px_rgba(168,85,247,0.25)] hover:shadow-[0px_0px_30px_rgba(168,85,247,0.3)] transition-all scale-[120%] sm:scale-[120%] lg:scale-[130%]">
             <GuildTile guild={guild}/>
           </div>
         ) }
@@ -93,7 +93,7 @@ export default async function Index() {
       
       { top3Guilds && (
         <div className="space-y-4">
-          <div className="flex justify-between items-center">
+          <div className="flex gap-5 justify-between items-center">
             <div>
               <h1 className="text-3xl font-black w-full">Current Top Guilds</h1>
               <p className="text-sm text-neutral-300">Guilds are currently ranked by member count</p>

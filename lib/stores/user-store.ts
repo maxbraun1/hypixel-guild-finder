@@ -10,11 +10,13 @@ interface UserState {
   guild: guild | null;
   request_count: number;
   init: (data: { user: User | null, guild: guild | null, request_count: number }) => void;
+  setRequestCount: (count: number) => void;
 }
 
 export const useUserStore = create<UserState>((set) => ({
   user: null,
   guild: null,
   request_count: 0,
-  init: (data) => set({ user: data.user, guild: data.guild, request_count: data.request_count })
+  init: (data) => set({ user: data.user, guild: data.guild, request_count: data.request_count }),
+  setRequestCount: (count: number) => set(() => ({ request_count: count })),
 }));

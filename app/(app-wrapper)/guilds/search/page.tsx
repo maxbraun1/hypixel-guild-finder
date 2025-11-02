@@ -79,7 +79,6 @@ export default function Guilds() {
       ) : (
         <NoResults object="Guilds" />
       )}
-      <RequestPopup />
     </>
   );
 }

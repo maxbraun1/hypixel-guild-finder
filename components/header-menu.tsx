@@ -19,13 +19,12 @@ import {
 import Link from "next/link";
 import { signOutAction } from "@/app/(app-wrapper)/actions/auth-actions";
 import { Button } from "./ui/button";
-import { useRequestStore } from "@/app/(app-wrapper)/guilds/search/request-store";
 import { useEffect } from "react";
 import { useUserStore } from "@/lib/stores/user-store";
 
 export default function HeaderMenu() {
   const { request_count: initial_request_count, guild } = useUserStore();
-  const { setRequestCount, request_count } = useRequestStore();
+  const { setRequestCount, request_count } = useUserStore();
 
   useEffect(() => {
     setRequestCount(initial_request_count);

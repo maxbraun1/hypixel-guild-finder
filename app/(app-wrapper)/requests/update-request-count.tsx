@@ -1,13 +1,13 @@
 "use client";
 
 import { useEffect } from "react";
-import { useRequestStore } from "../guilds/search/request-store";
+import { useUserStore } from "@/lib/stores/user-store";
 
-export default function UpdateRequestCount() {
-  const setRequestCount = useRequestStore((state) => state.setRequestCount);
+export default function UpdateRequestCount({ count }: { count: number }) {
+  const { setRequestCount } = useUserStore();
 
   useEffect(() => {
-    setRequestCount(0);
+    setRequestCount(count);
   }, []);
 
   return null;
