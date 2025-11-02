@@ -2,36 +2,69 @@
 
 import TopGame from "./top-game";
 import { Button } from "@/components/ui/button";
-import { Calendar, MessagesSquare, Sparkle, User } from "lucide-react";
+import { Activity, Calendar, Clock, Hash, Medal, MessagesSquare, Sparkle, TrendingUp, User, Users } from "lucide-react";
 import DiscordLogo from "@/public/assets/discord-icon.webp";
 import Image from "next/image";
+import { cn, isOverOneYearOld, ordinal, wasWithinLast14Days } from "@/lib/utils";
+import "../../search/components/guild-tile.css";
+import GuildBadge from "./guild-badge";
 
 export default function GuildSidebar({
   guild
 }: {
   guild: guild
 }) {
+  const badges = [];
+
+  if (guild.rank && guild.rank < 10) badges.push('top10');
+  if (wasWithinLast14Days(Number(guild.owner_last_login))) badges.push('active');
+  if (isOverOneYearOld(guild.guild_founded_at)) badges.push('mature');
+  if (guild.exp >= 100000000) badges.push("100mil");
+  if (guild.members_count >= 80) badges.push("popular");
+
   return (
-    <div className="bg-neutral-900 rounded-lg space-y-5 p-4 font-display basis-[300px] w-full">
+    <div className="bg-neutral-900 rounded-lg space-y-5 p-4 font-display basis-[300px] w-[300px]">
       <div className="bg-neutral-800 rounded-md p-2 flex items-start gap-2">
-          <Image
-            width={30}
-            height={30}
-            className="rounded overflow-hidden"
-            src={`https://mc-heads.net/avatar/${guild.owner_username}`}
-            alt={guild.owner_username}
-          />
-          <div>
-            <h3 className="text-neutral-400 leading-4 uppercase text-xs">Owner</h3>
-            <h2 className="text-base font-bold leading-4">{guild.owner_username}</h2>
-          </div>
+        <Image
+          width={30}
+          height={30}
+          className="rounded overflow-hidden"
+          src={`https://mc-heads.net/avatar/${guild.owner_username}`}
+          alt={guild.owner_username}
+        />
+        <div>
+          <h3 className="text-neutral-400 leading-4 uppercase text-xs">Owner</h3>
+          <h2 className="text-base font-bold leading-4">{guild.owner_username}</h2>
         </div>
+      </div>
+
+      <div>
+        <h2 className="text-xl font-bold mb-3">Guild Badges</h2>
+        { badges.length <= 0 ? (
+          <p className="bg-neutral-950/50 text-center w-full text-sm text-neutral-500 rounded-lg p-2">No Badges Yet</p>
+        ) : (
+          <div className="grid grid-cols-3 gap-2">
+            { badges.includes("top10") && <GuildBadge name="Top 10" description="This guild is ranked in the top 10 on Hypixel Guild Finder. Guilds are ranked by total guild exp." icon={<Medal size={25} />} color="text-amber-500" /> }
+            { badges.includes("active") && <GuildBadge name="Active" description="This badge indicates that the owner of this guild has logged into Hypixel within the last 2 weeks, according to the Hypixel API." icon={<Activity size={25} />} color="text-green-500" />}
+            { badges.includes("mature") && <GuildBadge name="Mature" description="This badge indicates this guild is over 1 year old." icon={<Clock size={25} />} color="text-blue-500" />}
+            { badges.includes("100mil") && <GuildBadge name="100M XP" description="This badge indicates this guild has over 100 million guild exp." icon={<TrendingUp size={25} />} color="text-violet-400" />}
+            { badges.includes("popular") && <GuildBadge name="Popular" description="This badge indicates this guild has 80+ members." icon={<Users size={25} />} color="text-rose-500" />}
+          </div>
+        )}
+      </div>
+
       <div>
         <h2 className="text-xl font-bold mb-3">Guild Stats</h2>
         <div className="flex flex-col gap-2 justify-center">
+          { guild.rank && (
+            <div className={cn("w-full bg-neutral-950 rounded-md px-2.5 py-1.5 flex justify-between items-center", guild.rank === 1 && "gold", guild.rank === 2 && "silver", guild.rank === 3 && "bronze")}>
+              <h1 className="flex gap-1 items-center text-sm text-neutral-300"><Hash size={16} />Rank</h1>
+              <p className="font-bold">{ordinal(guild.rank)}</p>
+            </div>
+          )}
           <div className="w-full bg-neutral-950 rounded-md px-2.5 py-1.5 flex justify-between items-center">
-            <h1 className="flex gap-1 items-center text-sm text-neutral-300"><Sparkle size={16} />Top XP</h1>
-            <p className="font-bold">{guild.top_game_1.exp}</p>
+            <h1 className="flex gap-1 items-center text-sm text-neutral-300"><Sparkle size={16} />Exp</h1>
+            <p className="font-bold">{guild.exp}</p>
           </div>
           <div className="w-full bg-neutral-950 rounded-md px-2.5 py-1.5 flex justify-between items-center">
             <h1 className="flex gap-1 items-center text-sm text-neutral-300"><User size={16} />Members</h1>

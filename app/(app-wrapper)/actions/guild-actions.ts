@@ -123,7 +123,9 @@ export async function fetchAndUpdateGuild(id: string) {
   const one_day_ago = Date.now() - 1000 * 60 * 60 * 6;
   if (last_updated > one_day_ago) {
     // was updated less than 24 hours ago
-    return data[0] as guild;
+    const guild = data[0] as guild;
+    const rank = await getGuildRank(guild.exp);
+    return { ...guild, rank };
   }
 
   // Get guild info from Hypixel API
@@ -154,6 +156,7 @@ export async function fetchAndUpdateGuild(id: string) {
   // Update guild info
   const guild_id = guild._id;
   const name = guild.name;
+  const exp = guild.exp;
   const description = guild.description;
   const member_count = guild.members.length;
   const guild_founded_date = new Date(parseInt(guild.created));
@@ -173,6 +176,7 @@ export async function fetchAndUpdateGuild(id: string) {
     .update({
       hypixel_id: guild_id,
       name,
+      exp,
       h_description: description,
       owner_username,
       members_count: member_count,
@@ -190,7 +194,9 @@ export async function fetchAndUpdateGuild(id: string) {
     return null;
   }
 
-  return newdata[0] as guild;
+  const newGuild = newdata[0] as guild;
+  const rank = await getGuildRank(newGuild.exp);
+  return { ...newGuild, rank };
 }
 
 export async function createGuildVerificationCode() {
@@ -303,7 +309,7 @@ export async function getTopGuilds(opt: { limit?: number }) {
   let query = supabase
     .from("guilds")
     .select()
-    .order("members_count", { ascending: false })
+    .order("exp", { ascending: false })
     .eq("verified", true);
 
   if (opt.limit) {
@@ -318,7 +324,9 @@ export async function getTopGuilds(opt: { limit?: number }) {
     return null;
   }
 
-  return guilds as guild[];
+  const guildsWithRanks = guilds.map((guild, idx) => ({ ...guild, rank: idx + 1 }));
+
+  return guildsWithRanks as guild[];
 }
 
 export async function guildSearch(searchData: guild_search_data) {
@@ -385,12 +393,35 @@ export async function guildSearch(searchData: guild_search_data) {
     return { error, data: null, count: 0, perPage: 0 };
   }
 
-  return { error: false, data: guilds, count, perPage: resultsPerPage } as {
-    error: boolean;
-    data: guild[];
-    count: number;
-    perPage: number;
-  };
+  // get top 100 guilds ordered by exp
+  const { data: rankedGuilds } = await supabase
+    .from("guilds")
+    .select("id, exp")
+    .eq("verified", true)
+    .eq("accepting_members", true)
+    .order("exp", { ascending: false })
+    .limit(10);
+
+  if(rankedGuilds) {
+    const rankMap = new Map<string, number>();
+    rankedGuilds.forEach((g, i) => rankMap.set(g.id, i + 1));
+
+    const guildsWithRanks = guilds.map(guild => ({ ...guild, rank: rankMap.get(guild.id) || null} as guild));
+    
+    return { error: false, data: guildsWithRanks, count, perPage: resultsPerPage } as {
+      error: boolean;
+      data: guild[];
+      count: number;
+      perPage: number;
+    };
+  } else {
+    return { error: false, data: guilds, count, perPage: resultsPerPage } as {
+      error: boolean;
+      data: guild[];
+      count: number;
+      perPage: number;
+    };
+  }
 }
 
 export async function sendRequestReminderEmails() {
@@ -507,7 +538,57 @@ export async function updateGuildActivity() {
 
       error && console.log(error);
     }
+
+    // Get guild info from Hypixel API and update guild EXP
+    const guildData = await axios
+      .get(
+        `https://api.hypixel.net/guild?key=${process.env.HYPIXEL_KEY}&id=${guild.hypixel_id}`
+      )
+      .then(async (response) => {
+        if (response.data.success) {
+          if (response.data.guild === null) {
+            // Guild has been disbanded
+            console.log("guild has been disbanded. ID: ", guild.id);
+            await supabase.from("guilds").delete().eq("hypixel_id", guild.id);
+            return null;
+          }
+          return response.data.guild as h_guild;
+        } else {
+          return null;
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        return null;
+      });
+
+    if(!guildData) continue;
+
+    await supabase
+      .from("guilds")
+      .update({
+        exp: guildData.exp,
+      })
+      .eq("id", guild.id);
   }
 
   return true;
+}
+
+export async function getGuildRank(guildExp: number){
+  const supabase = await createClient();
+  
+  const { count, error: countError } = await supabase
+  .from("guilds")
+  .select("*", { count: "exact", head: true })
+  .eq("verified", true)
+  .eq("accepting_members", true)
+  .gt("exp", guildExp);
+
+  if (countError) throw countError;
+
+  // rank = number of higher exp guilds + 1
+  const rank = (count ?? 0) + 1;
+
+  return rank;
 }

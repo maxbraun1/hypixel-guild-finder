@@ -1,3 +1,4 @@
+import { createClient } from "@/utils/supabase/server";
 import axios from "axios";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -61,4 +62,23 @@ export function wasWithinLast14Days(unixTimestamp: number) {
   const sevenDaysAgo = now - 14 * 24 * 60 * 60 * 1000;
 
   return unixTimestamp >= sevenDaysAgo && unixTimestamp <= now;
+}
+
+export function ordinal(n: number): string {
+  const s = ["th", "st", "nd", "rd"];
+  const v = n % 100;
+  return n + (s[(v - 20) % 10] || s[v] || s[0]);
+}
+
+export function isOverOneYearOld(timestamp: number | string | Date): boolean {
+  const date = new Date(timestamp);
+  const now = new Date();
+  
+  // Calculate the difference in milliseconds
+  const diff = now.getTime() - date.getTime();
+  
+  // 1 year ≈ 365 days
+  const oneYearMs = 365 * 24 * 60 * 60 * 1000;
+  
+  return diff > oneYearMs;
 }

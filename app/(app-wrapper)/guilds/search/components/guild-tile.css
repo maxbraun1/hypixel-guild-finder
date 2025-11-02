@@ -1,0 +1,18 @@
+.gold {
+  background: linear-gradient(-60deg, #D4AF37 30%, rgb(246, 213, 150), #D4AF37 70%) right/320% 100%;
+  animation: shimmer 4s infinite;
+}
+.silver {
+  background: linear-gradient(-60deg, #818181 30%, rgb(220, 220, 220), #818181 70%) right/320% 100%;
+  animation: shimmer 4s infinite;
+}
+.bronze {
+  background: linear-gradient(-60deg, #CD7F32 30%, rgb(220, 220, 220), #CD7F32 70%) right/320% 100%;
+  animation: shimmer 4s infinite;
+}
+
+@keyframes shimmer {
+  100% {
+    background-position: left;
+  }
+}

@@ -2,6 +2,7 @@ interface h_guild {
   _id: string;
   name: string;
   description: string;
+  exp: number;
   preferredGames: string[];
   name_lower: string;
   coins: number;
@@ -34,6 +35,7 @@ interface guild {
   created_at: string;
   owner: string;
   hypixel_id: string;
+  exp: number;
   accepting_members: boolean;
   name: string;
   members_count: number;
@@ -49,6 +51,7 @@ interface guild {
   top_game_2: { name: string; exp: number };
   top_game_3: { name: string; exp: number };
   owner_last_login: string;
+  rank: number | null;
 }
 
 interface request {

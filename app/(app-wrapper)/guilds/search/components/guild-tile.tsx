@@ -1,4 +1,4 @@
-import { Info, User } from "lucide-react";
+import { Info, Medal, MonitorCheck, User } from "lucide-react";
 import TopGameSmall from "./top-game-small";
 import Link from "next/link";
 import GuildTileFooter from "./guild-footer";
@@ -7,7 +7,8 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { wasWithinLast14Days } from "@/lib/utils";
+import { cn, wasWithinLast14Days } from "@/lib/utils";
+import "./guild-tile.css";
 
 export default function GuildTile({ guild }: { guild: guild }) {
   const options = {
@@ -36,22 +37,39 @@ export default function GuildTile({ guild }: { guild: guild }) {
               {guild.members_count}
             </div>
           </div>
-          {wasWithinLast14Days(Number(guild.owner_last_login)) && (
-            <Tooltip delayDuration={300}>
-              <TooltipTrigger asChild>
-                <p className="bg-amber-500 w-fit px-1 rounded text-xs mt-1.5 py-0.5 flex gap-0.5 items-center">
-                  Online Recently <Info size={11} />
-                </p>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p className="text-xs max-w-sm">
-                  This badge indicates that the owner of this guild has logged
-                  into Hypixel within the last 2 weeks, according to the Hypixel
-                  API.
-                </p>
-              </TooltipContent>
-            </Tooltip>
-          )}
+          <div className="flex gap-1">
+            {/* Guild medals */}
+            {guild.rank && (
+              <Tooltip delayDuration={300}>
+                <TooltipTrigger asChild>
+                  <p className={cn("bg-neutral-700 w-fit px-1 rounded text-xs mt-1.5 py-0.5 flex gap-1 items-center", guild.rank === 1 && "gold", guild.rank === 2 && "silver", guild.rank === 3 && "bronze")}>
+                    <Medal size={15} /> Ranked <span className="font-bold">#{guild.rank}</span>
+                  </p>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p className="text-xs max-w-sm">
+                    This guild is ranked #{guild.rank} on Hypixel Guild Finder. Guilds are ranked by total guild exp.
+                  </p>
+                </TooltipContent>
+              </Tooltip>
+            )}
+            {wasWithinLast14Days(Number(guild.owner_last_login)) && (
+              <Tooltip delayDuration={300}>
+                <TooltipTrigger asChild>
+                  <p className="bg-neutral-800 w-fit px-1 rounded text-xs mt-1.5 py-0.5 flex gap-1 items-center">
+                    <MonitorCheck size={15} className="text-green-600" /> Online Recently
+                  </p>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p className="text-xs max-w-sm">
+                    This badge indicates that the owner of this guild has logged
+                    into Hypixel within the last 2 weeks, according to the Hypixel
+                    API.
+                  </p>
+                </TooltipContent>
+              </Tooltip>
+            )}
+          </div>
         </div>
         <div className="p-3 grow">
           {guild.h_description ? (

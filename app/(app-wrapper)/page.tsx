@@ -96,7 +96,7 @@ export default async function Index() {
           <div className="flex gap-5 justify-between items-center">
             <div>
               <h1 className="text-3xl font-black w-full">Current Top Guilds</h1>
-              <p className="text-sm text-neutral-300">Guilds are currently ranked by member count</p>
+              <p className="text-sm text-neutral-300">Guilds are currently ranked by total guild exp.</p>
             </div>
             <Link href="/guilds/search"><Button variant="outline" className="flex gap-1">View All <ArrowRight size={15}/></Button></Link>
           </div>
