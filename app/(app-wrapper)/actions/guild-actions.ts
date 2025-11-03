@@ -356,10 +356,11 @@ export async function guildSearch(searchData: guild_search_data) {
     .eq("accepting_members", true);
 
   if (searchData.term) {
-    query = query.textSearch("name", searchData.term, {
-      type: "plain",
-      config: "english",
-    });
+    const term = `%${searchData.term}%`;
+
+    query = query.or(
+      `name.ilike.${term},description.ilike.${term}`
+    );
   }
 
   if (searchData.guildSize) {

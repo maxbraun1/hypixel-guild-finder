@@ -1,7 +1,6 @@
 "use client";
 
 import GuildTile from "./components/guild-tile";
-import RequestPopup from "./components/request-popup";
 import GuildGrid from "./components/guild-grid";
 import SearchPopup from "./components/search-popup";
 import { useEffect, useState } from "react";

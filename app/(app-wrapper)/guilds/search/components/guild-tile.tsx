@@ -1,4 +1,6 @@
-import { Info, Medal, MonitorCheck, User } from "lucide-react";
+"use client";
+
+import { Medal, MonitorCheck, User } from "lucide-react";
 import TopGameSmall from "./top-game-small";
 import Link from "next/link";
 import GuildTileFooter from "./guild-footer";
@@ -9,8 +11,11 @@ import {
 } from "@/components/ui/tooltip";
 import { cn, wasWithinLast14Days } from "@/lib/utils";
 import "./guild-tile.css";
+import { useSearchParams } from 'next/navigation'
 
 export default function GuildTile({ guild }: { guild: guild }) {
+  const searchParams = useSearchParams();
+
   const options = {
     year: "numeric",
     month: "long",
@@ -22,9 +27,11 @@ export default function GuildTile({ guild }: { guild: guild }) {
     options
   );
 
+  const currentQuery = new URLSearchParams(searchParams).toString();
+
   return (
     <div className="border flex flex-col rounded-lg bg-neutral-900 divide-y w-full">
-      <Link href={`/guilds/${guild.hypixel_id}`} className="divide-y w-full flex flex-col grow">
+      <Link href={`/guilds/${guild.hypixel_id}?back=${encodeURIComponent(currentQuery)}`} className="divide-y w-full flex flex-col grow">
         <div className="p-3">
           <div className="flex justify-between">
             <div>

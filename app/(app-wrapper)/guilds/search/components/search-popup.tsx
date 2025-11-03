@@ -1,6 +1,6 @@
 "use client";
 import useQueryParams from "@/utils/useQueryParams";
-import { useEffect, useState } from "react";
+import { KeyboardEventHandler, useEffect, useState } from "react";
 import {
   AlertDialog,
   AlertDialogContent,
@@ -87,6 +87,12 @@ export default function SearchPopup() {
     setRecentlyOnline(queryParams.get("recentlyOnline") !== null);
   }
 
+  function searchKeyDown(e: React.KeyboardEvent<HTMLInputElement>){
+    if (e.key === "Enter") {
+      search();
+    }
+  }
+
   return (
     <>
       <Button
@@ -109,6 +115,7 @@ export default function SearchPopup() {
             <Input
               className="w-full"
               value={term}
+              onKeyDown={e => searchKeyDown(e)}
               onChange={(e) => setTerm(e.target.value)}
               placeholder="Search term..."
             />
