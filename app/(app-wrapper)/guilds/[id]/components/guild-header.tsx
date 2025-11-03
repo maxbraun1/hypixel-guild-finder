@@ -9,11 +9,9 @@ import { Info } from "lucide-react";
 export default function GuildHeader({
   guild_id,
   guild_name,
-  owner_last_login,
 }: {
   guild_id: string;
   guild_name: string;
-  owner_last_login: string;
 }) {
   return (
     <div className="rounded-lg pt-2 flex justify-between items-start font-display">
