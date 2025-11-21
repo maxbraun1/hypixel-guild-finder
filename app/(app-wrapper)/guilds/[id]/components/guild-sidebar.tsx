@@ -23,7 +23,7 @@ export default function GuildSidebar({
   if (guild.members_count >= 80) badges.push("popular");
 
   return (
-    <div className="bg-neutral-900 rounded-lg space-y-5 p-4 font-display basis-[300px] w-[300px]">
+    <div className="bg-neutral-900 rounded-lg space-y-5 p-4 font-display basis-[300px] sm:w-[300px] w-full">
       <div className="bg-neutral-800 rounded-md p-2 flex items-start gap-2">
         <Image
           width={30}

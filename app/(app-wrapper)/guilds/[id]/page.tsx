@@ -30,7 +30,7 @@ export default async function GuildPage({
 
       <GuildHeader guild_id={guild.id} guild_name={guild.name} />
 
-      <div className="flex my-5 gap-5 items-stretch flex-col md:flex-row">
+      <div className="flex my-5 gap-5 items-stretch flex-col sm:flex-row">
         <GuildBody description={guild.description} hypixel_description={guild.h_description}/>
         <GuildSidebar guild={guild}/>
       </div>

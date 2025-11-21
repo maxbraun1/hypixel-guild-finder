@@ -95,7 +95,7 @@ export default async function Index() {
         <div className="space-y-4">
           <div className="flex gap-5 justify-between items-center">
             <div>
-              <h1 className="text-3xl font-black w-full">Current Top Guilds</h1>
+              <h1 className="sm:text-3xl text-xl font-black w-full">Current Top Guilds</h1>
               <p className="text-sm text-neutral-300">Guilds are currently ranked by total guild exp.</p>
             </div>
             <Link href="/guilds/search"><Button variant="outline" className="flex gap-1">View All <ArrowRight size={15}/></Button></Link>
@@ -110,7 +110,7 @@ export default async function Index() {
 
       <div className="max-w-7xl mx-auto !my-0 py-16 space-y-5">
         <div>
-          <h1 className="text-3xl font-black w-full">How to Add Your Guild</h1>
+          <h1 className="sm:text-3xl text-xl font-black w-full">How to Add Your Guild</h1>
           <div className="w-24 bg-[#a855f7] h-1 mt-4"></div>
         </div>
 

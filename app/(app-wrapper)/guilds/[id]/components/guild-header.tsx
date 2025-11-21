@@ -14,7 +14,7 @@ export default function GuildHeader({
   guild_name: string;
 }) {
   return (
-    <div className="rounded-lg pt-2 flex justify-between items-start font-display">
+    <div className="rounded-lg pt-2 flex flex-col justify-between items-start sm:flex-row font-display">
       <div className="mb-2 items-center">
         <h1 className="text-4xl font-bold w-full">{guild_name}</h1>
       </div>
