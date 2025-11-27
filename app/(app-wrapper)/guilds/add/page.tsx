@@ -24,7 +24,7 @@ export default async function AddGuild() {
       return (
         <p>
           Please{" "}
-          <Link href="/account" className="text-purple-400">
+          <Link href="/settings/account" className="text-purple-400">
             add your Minecraft username
           </Link>{" "}
           before you add a guild!
