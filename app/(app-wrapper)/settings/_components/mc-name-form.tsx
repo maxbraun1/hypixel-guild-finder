@@ -9,12 +9,11 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
-import { ArrowRight, CircleCheck, LoaderCircle, X } from "lucide-react";
+import { Check, LoaderCircle, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import {
   getMCUsername,
@@ -34,9 +33,7 @@ const formSchema = z.object({
 });
 
 export default function MCUsernameForm() {
-  const [buttonState, setButtonState] = useState<
-    "submit" | "loading" | "error" | "success"
-  >("loading");
+  const [loading, setLoading] = useState<boolean>(true);
   const [mcPicture, setMCPicture] = useState<null | string>(null);
   const { toast } = useToast();
   const mcHeadsURL = "https://mc-heads.net/avatar/";
@@ -46,10 +43,8 @@ export default function MCUsernameForm() {
       if (result) {
         form.setValue("username", result);
         setMCPicture(mcHeadsURL + result);
-        setButtonState("success");
-      } else {
-        setButtonState("submit");
       }
+      setLoading(false);
     });
   }, []);
 
@@ -61,10 +56,9 @@ export default function MCUsernameForm() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    setButtonState("loading");
+    setLoading(true);
     const response = await updateMCUsername(values.username);
     if (response !== null) {
-      setButtonState("error");
       setMCPicture(null);
       toast({
         variant: "destructive",
@@ -72,88 +66,51 @@ export default function MCUsernameForm() {
         description: response.error,
       });
     } else {
-      setButtonState("success");
       setMCPicture(mcHeadsURL + values.username);
       toast({
-        description: "Your username has been updated.",
+        description: "Your username has been saved.",
       });
     }
-  }
-
-  form.watch(() => {
-    setButtonState("submit");
-  });
-
-  function submitButton() {
-    switch (buttonState) {
-      case "submit":
-        return (
-          <Button type="submit" className="h-12 rounded-none p-3 !m-0">
-            <ArrowRight />
-          </Button>
-        );
-      case "loading":
-        return (
-          <Button type="submit" className="h-12 rounded-none p-3 !m-0">
-            <LoaderCircle className="animate-spin" />
-          </Button>
-        );
-      case "error":
-        return (
-          <Button
-            type="submit"
-            className="h-12 rounded-none p-3 !m-0 bg-red-500 hover:bg-red-500 cursor-not-allowed"
-          >
-            <X />
-          </Button>
-        );
-      case "success":
-        return (
-          <Button
-            type="submit"
-            className="h-12 rounded-none p-3 !m-0 bg-green-600 hover:bg-green-700"
-          >
-            <CircleCheck />
-          </Button>
-        );
-    }
+    setLoading(false);
   }
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2 mt-2">
-        <FormLabel className="text-lg">Minecraft Username</FormLabel>
-        <div className="flex gap-2">
-          <Image
-            className="rounded overflow-hidden"
-            src={mcPicture || "/assets/steve.png"}
-            width={48}
-            height={48}
-            alt=""
-          />
-          <FormField
-            control={form.control}
-            name="username"
-            render={({ field }) => (
-              <>
-                <FormItem className="flex border w-fit h-12 rounded overflow-hidden gap-1">
-                  <FormControl>
-                    <div>
-                      <Input
-                        placeholder="HypixelPlayer123"
-                        className="w-full max-w-xs h-12 !m-0 border-0 rounded-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
-                        {...field}
-                      />
-                      {submitButton()}
-                    </div>
-                  </FormControl>
-                </FormItem>
-                <FormMessage className="text-white mt-2" />
-              </>
-            )}
-          />
-        </div>
-      </form>
-    </Form>
+    <div className="mt-5">
+      <p>Minecraft Username</p>
+      <div className="mt-4 flex items-start gap-5">
+        <Image
+          className="rounded overflow-hidden"
+          src={mcPicture || "/assets/steve.png"}
+          width={60}
+          height={60}
+          alt=""
+        />
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            <FormField
+              control={form.control}
+              name="username"
+              render={({ field }) => (
+                <>
+                  <FormItem className="flex w-fit overflow-hidden gap-1">
+                    <FormControl>
+                      <div className="flex bg-neutral-800 p-2 pl-0 items-stretch rounded-lg overflow-hidden">
+                        <Input
+                          placeholder="HypixelPlayer123"
+                          className="w-full max-w-xs !m-0 border-0 h-8 bg-transparent rounded-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+                          {...field}
+                        />
+                        <Button className="w-20 h-8 px-2.5 bg-purple-600 hover:bg-purple-700">{ loading ? <LoaderCircle className="animate-spin" size={15}/> : "Save" }</Button>
+                      </div>
+                    </FormControl>
+                  </FormItem>
+                  <FormMessage className="text-white mt-2" />
+                </>
+              )}
+            />
+          </form>
+        </Form>
+      </div>
+    </div>
   );
 }

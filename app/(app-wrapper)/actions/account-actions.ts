@@ -13,6 +13,7 @@ export async function updateMCUsername(username: string) {
     .from("profiles")
     .select("id")
     .eq("mc_username", username)
+    .neq("id", user.id)
     .limit(1);
 
   if (data && data.length > 0) return { error: "Username already in use" };
