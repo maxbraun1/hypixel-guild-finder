@@ -59,7 +59,7 @@ export default async function DiscordLinkPage({
   }
 }
 
-export async function getDiscordGuildName(discordGuildId: string){
+async function getDiscordGuildName(discordGuildId: string){
   try {
     const response = await fetch(
       `https://discord.com/api/v10/guilds/${discordGuildId}`,
