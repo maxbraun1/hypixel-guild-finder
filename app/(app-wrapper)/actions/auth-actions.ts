@@ -5,6 +5,7 @@ import { createClient } from "@/utils/supabase/server";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
+import { revalidatePath } from "next/cache";
 
 export const signUpAction = async (formData: FormData): Promise<void> => {
   const email = formData.get("email")?.toString();
@@ -67,8 +68,9 @@ export const signInAction = async (formData: FormData) => {
     return encodedRedirect("error", "/sign-in", error.message);
   }
 
-  if (redirectURL) return redirect("/" + redirectURL);
-  return redirect("/");
+  revalidatePath('/', 'layout');
+  if (redirectURL) redirect(redirectURL);
+  redirect("/");
 };
 
 export const forgotPasswordAction = async (formData: FormData) => {

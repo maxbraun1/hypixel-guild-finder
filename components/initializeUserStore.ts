@@ -11,10 +11,12 @@ export default function InitializeUserStore({
     guild: guild | null,
     request_count: number
   }
-}){
+}) {
   const { init } = useUserStore();
 
-  useEffect(() => init(userData), []);
+  useEffect(() => {
+    init(userData);
+  }, [userData]);
 
   return null;
 }
