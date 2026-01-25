@@ -78,3 +78,12 @@ interface guild_search_data {
   recentlyOnline: string | null;
   page: number | null;
 }
+
+interface discord_integration {
+  id: string;
+  guild_id: string;
+  discord_guild_id: string;
+  discord_channel_id: string;
+  discord_user_id: string;
+  created_at: string;
+}

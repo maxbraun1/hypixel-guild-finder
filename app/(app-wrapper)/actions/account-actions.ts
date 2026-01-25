@@ -1,5 +1,6 @@
 "use server";
 
+import { sendDiscordGuildRequestNotification } from "@/lib/discord-client";
 import { createClient } from "@/utils/supabase/server";
 
 export async function updateMCUsername(username: string) {
@@ -184,11 +185,30 @@ export async function sendRequest(
 
   if (requests && requests.length > 0) return false;
 
-  const { error } = await supabase
+  const { error: insertError } = await supabase
     .from("requests")
     .insert({ guild_id, username, message });
 
-  if (error) return false;
+  if (insertError) return false;
+
+  // Check if guild has discord linked
+  const { data, error } = await supabase
+    .from("discord_integrations")
+    .select()
+    .eq("guild_id", guild_id);
+
+  if (error) console.log("Error fetching guild discord link data", error);
+
+  // If so, send message to Discord
+  if (data && data.length > 0) {
+    if (data[0].discord_channel_id) {
+      const channelId = data[0].discord_channel_id as string;
+      const result = await sendDiscordGuildRequestNotification(channelId, username);
+
+      if (!result.error) console.log("Error sending Discord message", result.error);
+    }
+  }
+
   return true;
 }
 

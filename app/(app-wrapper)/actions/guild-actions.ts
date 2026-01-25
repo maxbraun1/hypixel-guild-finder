@@ -4,11 +4,18 @@ import {
   getGuildID,
   getMCUsername,
 } from "@/app/(app-wrapper)/actions/account-actions";
+import { sendDiscordMessage } from "@/lib/discord-client";
 import prisma from "@/lib/prisma";
 import { UUIDtoUsername, getGuildInfo } from "@/lib/utils";
 import { createClient } from "@/utils/supabase/server";
 import axios from "axios";
 import Mailgun from "mailgun.js";
+
+type GuildDiscordLinkData = {
+  discordGuildId: string,
+  discordChannelId: string,
+  discordUserId: string,
+}
 
 export async function findUserGuild() {
   const username = await getMCUsername();
@@ -316,7 +323,7 @@ export async function getTopGuilds(opt: { limit?: number }) {
     query = query.limit(opt.limit);
   }
 
-  
+
   const { data: guilds, error } = await query;
 
   if (error || guilds.length < 1) {
@@ -403,12 +410,12 @@ export async function guildSearch(searchData: guild_search_data) {
     .order("exp", { ascending: false })
     .limit(10);
 
-  if(rankedGuilds) {
+  if (rankedGuilds) {
     const rankMap = new Map<string, number>();
     rankedGuilds.forEach((g, i) => rankMap.set(g.id, i + 1));
 
-    const guildsWithRanks = guilds.map(guild => ({ ...guild, rank: rankMap.get(guild.id) || null} as guild));
-    
+    const guildsWithRanks = guilds.map(guild => ({ ...guild, rank: rankMap.get(guild.id) || null } as guild));
+
     return { error: false, data: guildsWithRanks, count, perPage: resultsPerPage } as {
       error: boolean;
       data: guild[];
@@ -479,7 +486,7 @@ export async function sendRequestReminderEmails() {
           "h:X-Mailgun-Variables": JSON.stringify({
             guild_name: guildWithProfile.name,
             view_requests_url:
-              base_url + "/sign-in?redirectURL=requests/incoming",
+              base_url + "/sign-in?redirectURL=/requests/incoming",
           }),
         });
       } catch (error) {
@@ -563,7 +570,7 @@ export async function updateGuildActivity() {
         return null;
       });
 
-    if(!guildData) continue;
+    if (!guildData) continue;
 
     await supabase
       .from("guilds")
@@ -576,15 +583,15 @@ export async function updateGuildActivity() {
   return true;
 }
 
-export async function getGuildRank(guildExp: number){
+export async function getGuildRank(guildExp: number) {
   const supabase = await createClient();
-  
+
   const { count, error: countError } = await supabase
-  .from("guilds")
-  .select("*", { count: "exact", head: true })
-  .eq("verified", true)
-  .eq("accepting_members", true)
-  .gt("exp", guildExp);
+    .from("guilds")
+    .select("*", { count: "exact", head: true })
+    .eq("verified", true)
+    .eq("accepting_members", true)
+    .gt("exp", guildExp);
 
   if (countError) throw countError;
 
@@ -592,4 +599,50 @@ export async function getGuildRank(guildExp: number){
   const rank = (count ?? 0) + 1;
 
   return rank;
+}
+
+export async function addGuildDiscordLink(linkData: GuildDiscordLinkData) {
+  const supabase = await createClient();
+
+  const { discordGuildId, discordChannelId, discordUserId } = linkData;
+
+  if (!discordGuildId || !discordChannelId || !discordUserId) {
+    return { success: false, error: 'Invalid Discord Data' };
+  }
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) return { success: false, error: 'Not authenticated' };
+
+  const guild = await getUserGuild(user.id);
+
+  if (!guild) return { success: false, error: 'User does not have a guild' };
+
+  const { error } = await supabase
+    .from("discord_integrations")
+    .upsert(
+      {
+        guild_id: guild.id,
+        discord_guild_id: discordGuildId,
+        discord_channel_id: discordChannelId,
+        discord_user_id: discordUserId
+      },
+      {
+        onConflict: 'guild_id'
+      }
+    );
+
+  if (error) {
+    console.log(error);
+    return { success: false, error: error.message };
+  }
+
+  // Send Discord message
+  const response = await sendDiscordMessage(discordChannelId, `Your Hypixel Guild Finder guild, ${guild.name}, has been successfully linked!`);
+
+  if (!response.success) return { success: false, error: response.error };
+
+  return { success: true, error: null };
 }

@@ -1,7 +1,6 @@
 import { signInAction } from "@/app/(app-wrapper)/actions/auth-actions";
-import { FormMessage, Message } from "@/components/form-message";
+import { FormMessage } from "@/components/form-message";
 import { SubmitButton } from "@/components/submit-button";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { createClient } from "@/utils/supabase/server";
@@ -30,7 +29,7 @@ export default async function Login({
   } = await supabase.auth.getUser();
 
   if (user) {
-    if (redirectURL) redirect("/" + redirectURL);
+    if (redirectURL) redirect(redirectURL);
     else redirect("/");
   }
 
@@ -45,7 +44,7 @@ export default async function Login({
       </p>
 
       <div className="mt-4">
-        <GoogleSigninButton />
+        <GoogleSigninButton redirectUrl={redirectURL}/>
       </div>
 
       <div className="flex flex-col gap-2 [&>input]:mb-3 mt-4">

@@ -5,7 +5,7 @@ export const metadata = {
 
 export default function Contact() {
   return (
-    <div>
+    <div className="py-5">
       <h1 className="text-4xl font-bold mb-2">Contact Me</h1>
       <p>
         If you have questions, requests, want to report a bug, or anything else,

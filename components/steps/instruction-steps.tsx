@@ -68,6 +68,7 @@ export default function InstructionSteps({ steps }: { steps: Step[] }) {
           controls={false}
           muted
           autoPlay
+          playsInline
           loop
         ></video>
       </div>

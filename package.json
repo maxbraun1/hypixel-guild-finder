@@ -3,7 +3,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "register_commands": "node app/api/discord-app/commands.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
@@ -32,6 +33,9 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
+    "discord-interactions": "^4.4.0",
+    "discord.js": "^14.25.1",
+    "dotenv": "^17.2.3",
     "geist": "^1.4.1",
     "lucide-react": "^0.436.0",
     "mailgun.js": "^12.0.1",

@@ -18,8 +18,9 @@ import { useState } from "react";
 import TextEditor from "./text-editor";
 import { setGuildSettings } from "@/app/(app-wrapper)/actions/account-actions";
 import { useToast } from "@/hooks/use-toast";
-import { LoaderCircle, Save } from "lucide-react";
+import { ArrowRight, LoaderCircle, Save, Sparkle, Star } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
+import Link from "next/link";
 
 const formSchema = z.object({
   accepting_members: z.boolean().default(true),
@@ -190,13 +191,15 @@ export default function GuildSettingsForm({
           )}
         />
 
+        <div className="bg-neutral-900 rounded-lg p-5 border-none">
+          <h3 className="text-2xl font-display font-bold flex gap-1.5 items-center">Get Notified on Discord<span className="bg-purple-600 text-white text-sm px-1 rounded w-fit flex gap-1 items-center">New</span></h3>
+          <p className="text-neutral-400 mb-2">Get notified in your Discord server when players request to join your guild through Hypixel Guild Finder.</p>
+          <Link href="/discord-bot"><Button className="border-2 border-purple-500 gap-1 bg-neutral-900 hover:bg-purple-500 transition-all">Learn More <ArrowRight size={20}/></Button></Link>
+        </div>
+
         <Button type="submit" disabled={!updated} className="flex gap-2 mt-4">
           Save Settings
-          {loading ? (
-            <LoaderCircle className="animate-spin" size={18} />
-          ) : (
-            <Save size={18} />
-          )}
+          {loading && <LoaderCircle className="animate-spin" size={18} />}
         </Button>
       </form>
     </Form>

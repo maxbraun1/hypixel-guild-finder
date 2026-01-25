@@ -6,19 +6,20 @@ import Image from "next/image";
 
 export function GoogleSigninButton({
   signup,
+  redirectUrl
 }: {
   signup?: boolean | undefined;
+  redirectUrl?: string | undefined;
 }) {
   const supabase = createClient();
 
-  function googleLogin() {
-    const rootURL = process.env.NEXT_PUBLIC_DEV
-      ? "http://localhost:3000"
-      : "https://hypixelguildfinder.com";
-    const redirectURL = rootURL + "/auth/callback/google";
+  async function googleLogin(e: React.MouseEvent<HTMLButtonElement>) {
+    e.preventDefault();
+    const rootURL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+    const redirectURL = rootURL + `/auth/callback/google${ redirectUrl ? `?next=${encodeURIComponent(redirectUrl)}` : ''}`;
 
     supabase.auth.signInWithOAuth({
-      provider: "google",
+      provider: 'google',
       options: {
         redirectTo: redirectURL,
       },
