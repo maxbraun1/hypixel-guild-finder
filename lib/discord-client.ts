@@ -46,7 +46,7 @@ export async function sendDiscordGuildRequestNotification(
           embeds: [
             {
               title: `New Request to Join Your Guild`,
-              description: `**${userMCUsername}** has requested to your your guild.`,
+              description: `**${userMCUsername}** has requested to join your guild.`,
               color: 0x0fa01b,
               timestamp: new Date().toISOString(),
             },
