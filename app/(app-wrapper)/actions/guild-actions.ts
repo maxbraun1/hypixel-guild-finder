@@ -347,6 +347,7 @@ export async function guildSearch(searchData: guild_search_data) {
   ) {
     searchData.guildSize = null;
   }
+
   // guild sizes
   const sizes = {
     small: [0, 20],
@@ -362,6 +363,7 @@ export async function guildSearch(searchData: guild_search_data) {
     .eq("verified", true)
     .eq("accepting_members", true);
 
+  // Add search term query
   if (searchData.term) {
     const term = `%${searchData.term}%`;
 
@@ -370,35 +372,49 @@ export async function guildSearch(searchData: guild_search_data) {
     );
   }
 
+  // Add guild size query
   if (searchData.guildSize) {
     query
       .gte("members_count", sizes[searchData.guildSize][0])
       .lte("members_count", sizes[searchData.guildSize][1]);
   }
 
+  // Add top game query
   if (searchData.topGame) {
-    query.eq("top_game_1->name", JSON.stringify(searchData.topGame));
+    query = query.or(
+      `top_game_1->>name.eq.${searchData.topGame},` +
+      `top_game_2->>name.eq.${searchData.topGame},` +
+      `top_game_3->>name.eq.${searchData.topGame}`
+    );
   }
 
+  // Add recently online query
   if (searchData.recentlyOnline) {
     const UTC14DaysAgo = Date.now() - 14 * 24 * 60 * 60 * 1000;
     query.gt("owner_last_login", UTC14DaysAgo);
   }
 
-  if (searchData.page) {
-    query.range(
-      resultsPerPage * (searchData.page - 1),
-      resultsPerPage * searchData.page - 1
-    );
-  } else {
-    query.range(0, resultsPerPage - 1);
+  // Get the count to calculate valid page range
+  const { count } = await query;
+
+  if (!count || count === 0) {
+    return { error: false, data: [], count: 0, perPage: resultsPerPage, totalPages: 0 };
   }
 
-  const { data: guilds, count, error } = await query;
+  const totalPages = Math.ceil(count / resultsPerPage);
+  const validPage = Math.min(Math.max(1, searchData.page || 1), totalPages);
 
-  if (error || guilds.length < 1) {
+  // Add pagination with valid page
+  const start = resultsPerPage * (validPage - 1);
+  const end = resultsPerPage * validPage - 1;
+  query = query.range(start, end);
+
+  // Run query
+  const { data: guilds, error } = await query;
+
+  if (error || !guilds || guilds.length < 1) {
     error && console.log(error);
-    return { error, data: null, count: 0, perPage: 0 };
+    return { error, data: [], count: 0, perPage: resultsPerPage, totalPages };
   }
 
   // get top 100 guilds ordered by exp

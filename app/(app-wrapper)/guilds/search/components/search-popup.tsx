@@ -1,6 +1,6 @@
 "use client";
 import useQueryParams from "@/utils/useQueryParams";
-import { KeyboardEventHandler, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   AlertDialog,
   AlertDialogContent,
@@ -11,9 +11,9 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
-  CheckIcon,
   ChevronsUpDownIcon,
   Info,
+  RefreshCcw,
   Search,
   SlidersHorizontal,
 } from "lucide-react";
@@ -26,7 +26,6 @@ import {
 } from "@/components/ui/select";
 import { gameTypes } from "@/lib/game-types";
 import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import {
   Popover,
@@ -42,12 +41,14 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import { cn } from "@/lib/utils";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import Image from "next/image";
+import ImageWithFallback from "@/components/ui/image-with-fallback";
+import { Separator } from "@/components/ui/separator";
 
 export default function SearchPopup() {
   const [open, setOpen] = useState(false);
@@ -97,31 +98,36 @@ export default function SearchPopup() {
     <>
       <Button
         variant="secondary"
-        className="flex gap-2 bg-neutral-900 border"
+        className="flex gap-2 bg-neutral-900/50 border"
         onClick={() => setOpen(true)}
       >
         <SlidersHorizontal size={20} /> Search & Filter
       </Button>
 
       <AlertDialog open={open}>
-        <AlertDialogContent className="p-0">
-          <AlertDialogHeader className="p-5 pb-0">
+        <AlertDialogContent className="p-5 overflow-hidden bg-neutral-900 !rounded-2xl">
+          <AlertDialogHeader>
             <AlertDialogTitle className="leading-4">
               Filter & Search
             </AlertDialogTitle>
           </AlertDialogHeader>
 
-          <div className="space-y-5 text-left px-5">
-            <Input
-              className="w-full"
-              value={term}
-              onKeyDown={e => searchKeyDown(e)}
-              onChange={(e) => setTerm(e.target.value)}
-              placeholder="Search term..."
-            />
+          <div className="text-left p-5 rounded-lg bg-neutral-950/50 max-h-[400px] overflow-y-auto">
+            <div className="space-y-2">
+              <Label className="w-full block">Search Term</Label>
+              <Input
+                className="w-full"
+                value={term}
+                onKeyDown={e => searchKeyDown(e)}
+                onChange={(e) => setTerm(e.target.value)}
+                placeholder="Search term..."
+              />
+            </div>
 
-            <div className="space-y-1">
-              <Label className="w-full block mb-1">Top Played Game</Label>
+            <Separator className="my-4"/>
+
+            <div className="space-y-2">
+              <Label className="w-full block">Top Played Game</Label>
               <Popover
                 open={topGameSelectorOpen}
                 onOpenChange={setTopGameSelectorOpen}
@@ -132,16 +138,20 @@ export default function SearchPopup() {
                     variant="outline"
                     role="combobox"
                     aria-expanded={topGameSelectorOpen}
-                    className="w-[200px] justify-between"
+                    className="w-full justify-between !h-[50px] border"
                   >
                     {topGame
-                      ? gameTypes.find((gameType) => gameType.value === topGame)
-                          ?.name
+                      ? (<div className="flex gap-2 h-[40px] items-center">
+                          <ImageWithFallback src={`/assets/game_icons/${gameTypes.find((gameType) => gameType.value === topGame)
+                          ?.name}.png`} fallbackSrc="/assets/game_icons/DEFAULT.png" alt="test" width={40} height={40} className="aspect-square w-[40px] h-[40px]" />
+                          <p>{gameTypes.find((gameType) => gameType.value === topGame)
+                          ?.name}</p>
+                      </div>)
                       : "Select game..."}
                     <ChevronsUpDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-[200px] p-0">
+                <PopoverContent className="w-[300px] p-0 cursor-pointer">
                   <Command>
                     <CommandInput placeholder="Search game..." />
                     <CommandList>
@@ -158,15 +168,10 @@ export default function SearchPopup() {
                               setTopGameSelectorOpen(false);
                             }}
                           >
-                            <CheckIcon
-                              className={cn(
-                                "mr-2 h-4 w-4",
-                                topGame === gameType.value
-                                  ? "opacity-100"
-                                  : "opacity-0"
-                              )}
-                            />
-                            {gameType.name}
+                            <div className={cn("flex gap-2 h-[40px] items-center w-full cursor-pointer", topGame === gameType.value && "bg-neutral-800")}>
+                              <ImageWithFallback src={`/assets/game_icons/${gameType.value}.png`} fallbackSrc="/assets/game_icons/DEFAULT.png" alt="test" width={40} height={40} className="aspect-square w-[40px] h-[40px] rounded overflow-hidden" />
+                              <p className="text-lg">{gameType.name}</p>
+                            </div>
                           </CommandItem>
                         ))}
                       </CommandGroup>
@@ -175,8 +180,11 @@ export default function SearchPopup() {
                 </PopoverContent>
               </Popover>
             </div>
-            <div className="space-y-1">
-              <Label>Guild Size</Label>
+
+            <Separator className="my-4"/>
+
+            <div className="space-y-2">
+              <Label className="w-full block">Guild Size</Label>
               <Select
                 value={guildSize || undefined}
                 onValueChange={setGuildSize}
@@ -202,6 +210,9 @@ export default function SearchPopup() {
                 </SelectContent>
               </Select>
             </div>
+
+            <Separator className="my-4"/>
+
             <div className="space-y-1">
               <Label className="flex gap-1.5 items-center">
                 <div className="inline-flex items-center">
@@ -237,7 +248,7 @@ export default function SearchPopup() {
                   <TooltipTrigger asChild>
                     <Info size={14} />
                   </TooltipTrigger>
-                  <TooltipContent>
+                  <TooltipContent className="max-w-[250px]">
                     <p className="text-xs max-w-sm">
                       This indicates that the owner of this guild has logged
                       into Hypixel within the last 2 weeks, according to the
@@ -245,16 +256,13 @@ export default function SearchPopup() {
                     </p>
                   </TooltipContent>
                 </Tooltip>
-                <p className="border text-[10px] border-purple-500 text-purple-500 rounded-full py-0.5 px-1">
-                  New
-                </p>
               </Label>
             </div>
           </div>
 
-          <AlertDialogFooter className="flex p-5 border-t flex-row justify-between sm:justify-between">
+          <AlertDialogFooter className="flex bg-neutral-900/50 flex-row justify-between sm:justify-between">
             <Link href="/guilds/search">
-              <Button variant="outline">Reset Filters</Button>
+              <Button className="bg-transparent border-none gap-1.5 hover:bg-neutral-950"><RefreshCcw size={18} />Reset</Button>
             </Link>
             <div className="flex gap-2">
               <Button onClick={() => close()} variant="secondary">

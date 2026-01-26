@@ -39,7 +39,9 @@ export default function Guilds() {
       if (response.error) {
         console.log(response.error);
       } else {
+        console.log("Math", Math.ceil(response.count / response.perPage));
         setPageCount(Math.ceil(response.count / response.perPage));
+        if(Math.ceil(response.count / response.perPage) <= 1) setPage(1);
         setGuilds(response.data);
       }
     });
