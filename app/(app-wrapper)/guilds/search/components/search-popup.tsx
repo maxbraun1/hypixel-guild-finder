@@ -143,7 +143,7 @@ export default function SearchPopup() {
                     {topGame
                       ? (<div className="flex gap-2 h-[40px] items-center">
                           <ImageWithFallback src={`/assets/game_icons/${gameTypes.find((gameType) => gameType.value === topGame)
-                          ?.name}.png`} fallbackSrc="/assets/game_icons/DEFAULT.png" alt="test" width={40} height={40} className="aspect-square w-[40px] h-[40px]" />
+                          ?.value}.png`} fallbackSrc="/assets/game_icons/DEFAULT.png" alt="test" width={40} height={40} className="aspect-square w-[40px] h-[40px]" />
                           <p>{gameTypes.find((gameType) => gameType.value === topGame)
                           ?.name}</p>
                       </div>)
