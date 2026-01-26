@@ -27,7 +27,7 @@ export const gameTypes = [
   { value: "UHC", name: "UHC" },
   { value: "VAMPIREZ", name: "Vampirez" },
   { value: "WALLS", name: "Walls" },
-  { value: "WALLS3", name: "Walls 3" },
+  { value: "WALLS3", name: "Mega Walls" },
   { value: "WOOL_GAMES", name: "Wool Games" },
   //{ value: "SKYBLOCK", name: "Skyblock" }, // still commented out
 ];
