@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Plus, Search } from "lucide-react";
+import { ArrowRight, ChevronRight, Plus, Search } from "lucide-react";
 import InstructionSteps, { Step } from "@/components/steps/instruction-steps";
 import GuildTile from "./guilds/search/components/guild-tile";
 import { fetchAndUpdateGuild, getTopGuilds } from "./actions/guild-actions";
@@ -57,6 +57,15 @@ export default async function Index() {
 
   return (
     <div className="space-y-14 w-full font-display py-5 lg:p-0">
+      {/* Announcement */}
+      <div className="bg-gradient-to-br from-purple-600 to-purple-950 rounded-xl border-2 border-purple-600/20 flex gap-4 p-4 py-3 mt-5">
+        <div className="space-y-1">
+          <h3 className="text-2xl font-black">New Discord Bot!</h3>
+          <p className="leading-5">The Hypixel Guild Finder Discord bot offers a simple way to get notified when your guild gets a join request.</p>
+          <Link href="https://www.hypixelguildfinder.com/discord-bot" className="flex gap-1 font-bold text-lg items-center pt-2 hover:text-neutral-300">Learn More <ChevronRight /></Link>
+        </div>
+      </div>
+
       <div className="w-full flex flex-col items-center md:items-start justify-between gap-20 md:gap-10 my-10 bg-neutral-900/50 rounded-xl p-5 sm:p-10 md:flex-row">
         <div className="text-left grow font-display w-full md:max-w-md">
           <h1 className="text-7xl font-black text-center md:text-left">FIND YOUR GUILD</h1>
