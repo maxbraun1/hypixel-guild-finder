@@ -205,7 +205,7 @@ export async function sendRequest(
       const channelId = data[0].discord_channel_id as string;
       const result = await sendDiscordGuildRequestNotification(channelId, username);
 
-      if (!result.error) console.log("Error sending Discord message", result.error);
+      if (result.error) console.log("Error sending Discord message", result.error);
     }
   }
 
