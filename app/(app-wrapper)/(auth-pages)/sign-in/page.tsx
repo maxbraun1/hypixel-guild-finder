@@ -8,6 +8,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import Image from "next/image";
 import { GoogleSigninButton } from "../_components/google-signin-btn";
+import { MicrosoftSigninButton } from "../_components/microsoft-signin-btn";
 
 export const metadata = {
   title: "Sign In | Hypixel Guild Finder",
@@ -43,8 +44,9 @@ export default async function Login({
         </Link>
       </p>
 
-      <div className="mt-4">
-        <GoogleSigninButton redirectUrl={redirectURL}/>
+      <div className="mt-4 space-y-2">
+        <MicrosoftSigninButton redirectUrl={redirectURL} />
+        <GoogleSigninButton redirectUrl={redirectURL} />
       </div>
 
       <div className="flex flex-col gap-2 [&>input]:mb-3 mt-4">
